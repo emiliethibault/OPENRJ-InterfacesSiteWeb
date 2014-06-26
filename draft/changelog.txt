@@ -1,0 +1,56 @@
+@Version 	1.3
+@Date		Saturday, March 15, 2014
+@Author		Dorin Grigoras
+	* Revolution Slider Plugin Update (v4.2.5)
+	* Fixed Ajax Modal - added dedicated ajax container (changes: shortcodes-modals.html)
+	* Fixed Bootstrap Modal Background on Boxed Layout (changes: layout.css)
+	* Fixed min-height on desktop high resolution (keep footer at bottom)
+	* Fixed Mobile Menu (hanges: scripts.js , layout-responsive.css)
+	* IE Placeholder Fix (changes: scripts.js)
+	* Renamed index-shop.html to shop-home.html
+	* Renamed index-portfolio.html to portfolio-home.html
+	* Added Top Bar By Default
+	* Added Language Selector (changes: no special changes - added html markup only + assets/images/flags/*)
+	* Added Global Search (changes: scripts.js, layout.css, layout-responsive.css, layout-dark.css, color_scheme/*.css)
+	* Added Top Login Dropdown (changes:scripts.js, layout.css, layout-dark.css, color_scheme/*.css)
+	* Added Quick Shop Cart (changes:scripts.js, layout.css, layout-dark.css, color_scheme/*.css)
+	* Changed popover function - "X" (close) added without any html change (changes: scripts.js)
+	* Google Map settings moved from scripts.js to html. See documentation for more.
+	* Custom Revolution Sliders
+	* Portfolio Filter - added responsive rule for a better view (changes: layout-responsive.css)
+	* Radio & Checbox - style changed (changes: essentials.css)
+	* Knob Circular Bar - height fixed (changes: essentials.css)
+	* Added Price Slider Plugin (changes: scripts.js, shop-sidebar.html, shop-product-sidebar.html)
+	* Fixed Few Responsive Issues (changes: layout.css , shop.css)
+
+
+@Version 	1.2
+@Date		Tuesday, March 04, 2014
+@Author		Dorin Grigoras
+	* New Page: Real Estate Home
+	* New Page: Real Estate List
+	* New Page: Real Estate Single
+	* New Page: Medical Home
+	* New Page: College Home
+	* New Page: Church Home
+	* Fixed IE11 Top Nav on Boxed Layout (changes: layout.css)
+	* Revolution Slider Update to 4.2.2
+	* Added Revolution Slider official Documentation
+	* Added Revolution Slider Edit Tools
+	* Added Revolution Slider Official Examples
+	* Removed revolution-slider/css/captions.css
+	* Customized PRE html tag
+	* Renamed magazine-page.html to magazine-single.html
+
+@Version 	1.1
+@Date		Friday, February 21, 2014
+@Author		Dorin Grigoras
+	* Fixed shop-cart.html signin broken link
+	* Added PHP Contact form & Newsletter
+	* Standard Parallax Ratio changed from 0.7 to 0.2
+	* Added Custom Revolution Sliders
+
+@Version 	1.0
+@Date		Wednesday, February 19, 2014
+@Author		Dorin Grigoras
+	* Initial Release
