@@ -1,36 +1,45 @@
-# Windows image file caches
-Thumbs.db
-ehthumbs.db
+########################
+# sails
+########################
+.sails
+.waterline
+.rigging
+.tmp
 
-# Folder config file
-Desktop.ini
 
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
+########################
+# node.js / npm
+########################
+lib-cov
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
 
-# Windows Installer files
-*.cab
-*.msi
-*.msm
-*.msp
+pids
+logs
+results
 
-# =========================
-# Operating System Files
-# =========================
+node_modules
 
-# OSX
-# =========================
+npm-debug.log
 
-.DS_Store
-.AppleDouble
-.LSOverride
 
-# Icon must ends with two \r.
-Icon
+########################
+# misc / editors
+########################
+*~
+*#
+.DS_STORE
+.netbeans
+nbproject
+.idea
 
-# Thumbnails
-._*
 
-# Files that might appear on external disk
-.Spotlight-V100
-.Trashes
+########################
+# local config
+########################
+config/local.js
