@@ -1,0 +1,115 @@
+<!-- WRAPPER -->
+<div id="wrapper">
+
+    <!-- PAGE TITLE -->
+    <header id="page-title"> <!-- style="background-image:url('assets/images/demo/parallax_bg.jpg')" -->
+        <!--
+            Enable only if bright background image used
+            <span class="overlay"></span>
+        -->
+
+        <div class="container">
+            <h1>Contactez-nous</h1>
+
+            <ul class="breadcrumb">
+                <li><a href="/">Accueil</a></li>
+                <li class="active">Contact</li>
+            </ul>
+        </div>
+    </header>
+
+    <section id="contact" class="container">
+
+
+        <div class="row">
+
+            <!-- FORM -->
+            <div class="col-md-8">
+
+                <h2>Des questions, des remarques, à moins que vous souhaitiez <strong><em>nous rejoindre ?</em></strong></h2>
+
+                <form class="white-row" action="php/contact.php" method="post">
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-md-6">
+                                <label>Nom - prénom *</label>
+                                <input type="text" value="" data-msg-required="Please enter your name." maxlength="100" class="form-control" name="name" id="name">
+                            </div>
+                            <div class="col-md-6">
+                                <label>Adresse E-mail *</label>
+                                <input type="email" value="" data-msg-required="Please enter your email address." data-msg-email="Please enter a valid email address." maxlength="100" class="form-control" name="email" id="email">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label>Sujet</label>
+                                <!--<input type="text" value="" data-msg-required="Please enter the subject." maxlength="100" class="form-control" name="subject" id="subject">-->
+                                <select class="form-control pointer">
+                                    <option value="" selected="selected"></option>
+                                    <option value="">Rejoindre la communauté</option>
+                                    <option value="">Validation de jeux de données</option>
+                                    <option value="">Les API - Questions</option>
+                                    <option value="">Autres</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label>Message *</label>
+                                <textarea maxlength="5000" data-msg-required="Please enter your message." rows="10" class="form-control" name="message" id="message"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input type="submit" value="Envoyer le message" class="btn btn-primary btn-lg" data-loading-text="Loading...">
+                        </div>
+                    </div>
+                </form>
+            
+            </div>
+            <!-- /FORM -->
+
+
+            <!-- INFO -->
+            <div class="col-md-4">
+
+                <h2>Où sommes-nous ?</h2>
+
+                <div class="white-row">
+                    <div id="gmap"><!-- google map --></div>
+                    <script type="text/javascript">
+                        var $googlemap_latitude     = 43.6732936,
+                            $googlemap_longitude    = 6.8782122,
+                            $googlemap_zoom         = 5;
+                    </script>
+
+                    <div class="divider white half-margins"><!-- divider -->
+                        <i class="fa fa-star"></i>
+                    </div>
+
+                    <p class="nomargin-bottom">
+                        <span class="block"><strong><i class="fa fa-map-marker"></i> Address:</strong> CSTB, Alpes maritimes, France</span>
+                        <span class="block"><strong><i class="fa fa-phone"></i> Phone:</strong> (+33]4 93 95 67 11</span>
+                        <span class="block"><strong><i class="fa fa-envelope"></i> Email:</strong> <a href="mailto:openrj@cstb.fr">openrj@cstb.fr</a></span>
+                    </p>
+
+                </div>
+
+
+            </div>
+            <!-- /INFO -->
+
+        </div>
+
+    </section>
+
+</div>
+<!-- /WRAPPER -->

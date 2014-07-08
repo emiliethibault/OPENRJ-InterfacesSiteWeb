@@ -32,28 +32,85 @@ module.exports.routes = {
   // located at `views/home/index.ejs`
   // 
   // (This would also work if you had a file at: `/views/home.ejs`)
+  /* 
+    Home
+  */
   '/': {
     controller: 'HomeController',
     action: 'index'
   },
 
+  /*
+    About
+  */
   '/about-the-project': {
     controller: 'AboutController',
     action: 'project',
-    view: 'about/about-the-project'
   },
 
   '/about-us': {
     controller: 'AboutController',
     action: 'us',
-    view: 'about/about-us'
   },
 
   '/about-community': {
     controller: 'AboutController',
     action: 'community',
-    view: 'about/about-community'
-  }
+  },
+  /*
+    Join us
+  */
+  '/open-data': {
+    controller: 'JoinUsController',
+    action: 'openData',
+  },
+
+  '/join-us': {
+    controller: 'JoinUsController',
+    action: 'joinUs',
+  },
+
+  '/faq': {
+    controller: 'JoinUsController',
+    action: 'faq',
+  },
+
+  '/api': {
+    controller: 'JoinUsController',
+    action: 'api',
+  },
+
+  /*
+    Data
+  */
+
+  '/data-search': {
+    controller: 'SitesController',
+    action: 'sites'
+  },
+
+  /*
+    Hackathon
+  */
+
+  '/hackathon': {
+    controller: 'HackathonController',
+    action: 'hackathon'
+  },
+
+  '/hackathon-contact': {
+    controller: 'HackathonController',
+    action: 'hackathonContact'
+  },
+
+  /*
+    Contact
+  */
+
+  '/contact': {
+    controller: 'ContactController',
+    action: 'contact'
+  },
 
   /*
   // But what if you want your home page to display
