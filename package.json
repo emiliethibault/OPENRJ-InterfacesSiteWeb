@@ -12,9 +12,9 @@
     "sails-disk": "~0.9.0"
   },
   "scripts": {
-    "start": "forever start jupiter-openrj-ui.js",
-    "stop": "forever stop jupiter-openrj-ui.js",
-    "debug": "node debug jupiter-openrj-ui.js"
+    "start": "forever start jupiter-openrj-ui-beta.js",
+    "stop": "forever stop jupiter-openrj-ui-beta.js",
+    "debug": "node debug jupiter-openrj-ui-beta.js"
   },
   "main": "app.js",
   "repository": "",
