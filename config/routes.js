@@ -93,7 +93,7 @@ module.exports.routes = {
     Hackathon
   */
 
-  '/hackathon': {
+  /*'/hackathon': {
     controller: 'HackathonController',
     action: 'hackathon'
   },
@@ -101,7 +101,7 @@ module.exports.routes = {
   '/hackathon-contact': {
     controller: 'HackathonController',
     action: 'hackathonContact'
-  },
+  },*/
 
   /*
     Contact
