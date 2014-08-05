@@ -1,0 +1,267 @@
+<!--
+    To be displayed :
+
+    * Display site's information:
+        - (OK) label
+        - (OK) description
+        - (OK) photo
+        - (OK) data information
+        - (OK) variables list
+
+    * Display variables series:
+        - (OK) choose variable
+        - (NOT OK) navigate from-to
+        - (OK) display variable information
+        - (NOT OK) download this extract
+
+    * Downloads series:
+        - (NOT OK) from-to selector
+        - (NOT OK) check variable needed
+        - (NOT OK) variables table
+            - (NOT OK) label
+            - (NOT OK) from date
+            - (NOT OK) to date
+            - (NOT OK) number of point
+-->
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.0/themes/smoothness/jquery-ui.css" />
+
+<!-- WRAPPER -->
+<div id="wrapper">
+
+    <section class="container top-no-header">
+
+        <div class="white-row">
+
+            <div class="row">
+
+                <h3 class="page-header nomargin-top margin-bottom40">
+                    <strong class="styleColor">Le CSTB à Sophia</strong>
+                </h3>
+                
+                <figure class="agent-figure pull-left hidden-xs">
+                    <img src="/images/community/cstb.jpg" height="210" alt="agent" />
+                </figure>
+
+                <!-- agent detail -->
+                <p>
+                    <strong class="styleSecondColor fsize17">Alpes-Maritimes (06)</strong>
+                </p>
+                <p>
+                    <span class="block fsize12">
+                        <i class="fa fa-download" title="download"></i>&nbsp;&nbsp;<strong>280 000</strong>
+                    </span>
+                    <span class="block fsize12">
+                        <i class="fa fa-rss" title="garage"></i>&nbsp;&nbsp;<strong>12</strong>
+                    </span>
+                    <span class="block fsize12">
+                        <i class="fa fa-calendar" title="calendar">&nbsp;&nbsp;</i><strong>23 Oct. 2013</strong> 
+                    </span>
+                </p>
+
+                <p class="fsize13">
+                    Partenaire du projet, le CSTB, organisme de recherche situé à Sophia Antipolis, met à disposition sur la plateforme ses données de consommations.
+                </p>
+
+            </div>
+        
+        </div>
+        <div class="white-row">
+            <div class="row">
+
+                <h3 class="page-header nomargin-top margin-bottom40">
+                    <strong class="styleColor"><%= site.label %></strong>
+                </h3>
+                
+                <figure class="agent-figure pull-left hidden-xs">
+                    <img src="<%= site.photo %>" height="210" alt="site photo" />
+                </figure>
+
+                <!-- agent detail -->
+                <p>
+                    <strong class="styleSecondColor fsize17"><%= site.location %></strong>
+                </p>
+                <p>
+                    <span class="block fsize12">
+                        <i class="fa fa-download" title="download"></i>&nbsp;&nbsp;<strong><%= site.seriesCount %></strong>
+                    </span>
+                    <span class="block fsize12">
+                        <i class="fa fa-rss" title="garage"></i>&nbsp;&nbsp;<strong><%= site.variablesNumber %></strong>
+                    </span>
+                    <span class="block fsize12">
+                        <i class="fa fa-calendar" title="calendar">&nbsp;&nbsp;</i><strong><%= site.beginDate %></strong> 
+                    </span>
+                    <span class="block fsize12">
+                        <i class="fa fa-calendar" title="calendar">&nbsp;&nbsp;</i><strong><%= site.endDate %></strong> 
+                    </span>
+                </p>
+
+                <p class="fsize13">
+                    <%= site.description %>
+                </p>
+
+            </div>
+        
+        </div>
+        
+        <!-- Variables list -->
+        <div class="white-row">
+            <div class="row">
+                <h3 class="page-header nomargin-top margin-bottom40">
+                    <strong class="styleColor">Variables</strong>
+                </h3>
+                <table class="table table-bordered table-hover table-responsive table-striped">
+                    <thead>
+                        <tr>
+                            <th>Variable ID</th>
+                            <th>Label</th>
+                            <th>Type - Unité</th>
+                            <th>Bornes inférieur et supérieur</th>
+                            <th>Deltas minimum et maximum</th>
+                            <th>Période</th>
+                            <th>Nombre de point de mesure</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% _.each(variables, function (variable) { %>
+                        <tr>
+                            <td rowspan="2"><a href="#chart"><%= variable.extID %></a></td>
+                            <td rowspan="2"><%= variable.label %></td>
+                            <td><%= variable.type %> (<%= variable.valueType %>)</td>
+                            <td><%= variable.lowerBound %></td>
+                            <td><%= variable.deltaMin %></td>
+                            <td>23 Oct. 13</td>
+                            <td rowspan="2">654000</td>
+                        </tr>
+                        <tr>
+                            <td><%= variable.unit %></td>
+                            <td><%= variable.upperBound %></td>
+                            <td><%= variable.deltaMax %></td>
+                            <td>5 Aout 14</td>
+                        </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </div><!-- /Variables list -->
+
+        <div class="row">
+
+            <!-- center column -->
+            <div class="col-md-8">
+                <div class="white-row">
+
+                    <h3 class="page-header nomargin-top margin-bottom40">
+                        <strong class="styleColor">test1</strong>
+                    </h3>
+
+                    <!-- 
+                        carousel 
+                        900px images required!
+                    -->
+                    <div id="chart" style="height: 490px;">
+                        
+                    </div>
+                    <!-- /carousel -->
+                </div>                      
+
+            </div>
+
+            <!-- side column -->
+            <div class="col-md-4">
+
+
+
+                <form id="re-filter" action="/data-search/CSTB_SOPHIA/variables" method="get" class="white-row">
+
+                    <!-- FILTER / SEARCH -->
+                    <h3 class="page-header nomargin-top margin-bottom40">
+                        <strong class="styleColor">Filtres</strong>
+                    </h3>
+
+                    <div class="row">
+                        <div class="form-group">
+
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <label>Début période (inclue)</label>
+                                <input type="text" class="form-control" id="datepickerBeginDate">
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <label>Fin période (exclue)</label>
+                                <input type="text" class="form-control" id="datepickerEndDate">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-md-12 col-sm-6">
+                                <label>Label</label>
+                                <select class="form-control" name="re_location">
+                                <% _.each(variables, function (variable) { %>
+                                    <% if (variable.extID !== displayedVariable.extID) { %>
+                                    <option value="<%= variable.extID %>"><%= variable.label %></option>   
+                                    <% } else { %>
+                                    <option value="<%= variable.extID %>" SELECTED><%= variable.label %></option>
+                                    <% } %>
+                                <% }) %>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <label>Type</label>
+                                <input type="text" class="form-control" name="re_id" value="<%= displayedVariable.type %> (<%= displayedVariable.valueType %>)" disabled/>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <label>Unité</label>
+                                <input type="text" class="form-control" name="re_id" value="<%= displayedVariable.unit %>" disabled/>
+                            </div>
+                        
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <label>Borne inf.</label>
+                                <input type="text" class="form-control" name="re_id" value="<%= displayedVariable.lowerBound %>" disabled/>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <label>Borne sup.</label>
+                                <input type="text" class="form-control" name="re_id" value="<%= displayedVariable.upperBound %>" disabled/>
+                            </div>
+                        
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <label>Delta min.</label>
+                                <input type="text" class="form-control" name="re_id" value="<%= displayedVariable.deltaMin %>" disabled/>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <label>Delta max.</label>
+                                <input type="text" class="form-control" name="re_id" value="<%= displayedVariable.deltaMax %>" disabled/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label>&nbsp;</label>
+                                <button class="btn btn-primary fullwidth">FILTRER</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+
+    </section>
+</div>
+
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+<script>
+    $(function() {
+        $( "#datepickerBeginDate" ).datepicker();
+        $( "#datepickerEndDate" ).datepicker();
+    });
+</script>

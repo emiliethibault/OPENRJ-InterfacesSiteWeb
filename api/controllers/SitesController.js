@@ -15,11 +15,28 @@
  * @docs        :: http://sailsjs.org/#!documentation/controllers
  */
 
+var request = require('request');
+
 module.exports = {
     
     sites: function (req, res) {
-        res.view(null, {
-            title: 'OpeNRJ - Sites'
+
+        var sitesURL = 'https://api.openrj.eu/v1/sites',
+            pageTitle = 'OpeNRJ - Sites';
+
+        request(sitesURL, function (error, response, body) {
+            if (!error && response.statusCode === 200) {
+                body = JSON.parse(body);
+            } else {
+                body = {
+                    'sites': []
+                };
+            }
+
+            res.view(null, {
+                'title': pageTitle,
+                'sites': body.sites
+            });
         });
     },
 
