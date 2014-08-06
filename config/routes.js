@@ -93,10 +93,17 @@ module.exports.routes = {
     Hackathon
   */
 
+<<<<<<< HEAD
   /*'/hackathon': {
     controller: 'HackathonController',
     action: 'hackathon'
   },
+=======
+  // '/hackathon': {
+  //   controller: 'HackathonController',
+  //   action: 'hackathon'
+  // },
+>>>>>>> fe413bc8c19399c86264ab513552ddda9840e2ec
 
   '/hackathon-contact': {
     controller: 'HackathonController',
