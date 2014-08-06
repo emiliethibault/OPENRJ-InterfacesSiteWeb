@@ -162,8 +162,12 @@
                                     <span class="fsize12 pull-right">
                                         <%= site.seriesCount %> <i class="fa fa-download" title="download"></i><br>
                                         <%= site.variablesNumber %> <i class="fa fa-rss" title="garage"></i><br>
+                                    <% if (site.beginDate !== '') { %>
                                         <%= site.beginDate %> <i class="fa fa-calendar" title="calendar"></i><br>
+                                    <% } %>
+                                    <% if (site.endDate !== '') { %>
                                         <%= site.endDate %> <i class="fa fa-calendar" title="calendar"></i>
+                                    <% } %>
                                     </span>
                                 </p>
                             </div>
