@@ -89,6 +89,11 @@ module.exports.routes = {
     action: 'sites'
   },
 
+  '/data-search/:siteID/variables': {
+    controller: 'VariablesController',
+    action: 'variables'
+  },
+
   /*
     Hackathon
   */
