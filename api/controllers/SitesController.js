@@ -46,50 +46,53 @@ var request = require('request'),
             site['endDate'] = newEndDate;
         }
     },
-    getSeriesInformationPerSite = function (url, result, index, callback) {
-        var seriesInformation;
+    getSeriesInformationPerSite = function (seriesURL, callback) {           
+        var result = {
+            'seriesCount': 0,
+            'variablesNumber': 0,
+            'beginDate': '',
+            'endDate': ''
+        };
         
-        if (index === result.sites.length) {
-            callback(result);
-        } else {
-            var seriesURL = url + '/' + result.sites[index].extID + '/variables/series';
-            
-            result.sites[index]['seriesCount'] = 0;
-            result.sites[index]['variablesNumber'] = 0;
-            result.sites[index]['beginDate'] = '';
-            result.sites[index]['endDate'] = '';
-            
-            request(seriesURL, function (error, response, body) {
-                if (!error && response.statusCode === 200) {
-                    body = JSON.parse(body);
-                    var variables = body.result;
-                    if (variables.length) {
-                        result.sites[index]['variablesNumber'] = variables.length;
-                    }
-                    for (var i = 0 ; i < variables.length ; i++) {
-                        updateSeriesInformation(result.sites[index], variables[i]);
-                    }
+        request(seriesURL, function (error, response, body) {
+            if (!error && response.statusCode === 200) {
+                body = JSON.parse(body);
+                var variables = body.result;
+                if (variables.length) {
+                    result.variablesNumber = variables.length;
                 }
+                for (var i = 0 ; i < variables.length ; i++) {
+                    updateSeriesInformation(result, variables[i]);
+                }
+            }
 
-                getSeriesInformationPerSite(url, result, index + 1, callback);
-            });
-        }
-    };
+            callback(result);
+        });
+    },
+    APIURL = 'https://api.openrj.eu/v1/sites';
 
 module.exports = {
     
     sites: function (req, res) {
 
-        var sitesURL = 'https://api.openrj.eu/v1/sites',
-            pageTitle = 'OpeNRJ - Sites',
+        var pageTitle = 'OpeNRJ - Sites',
             options = {
                 'title': pageTitle
             };
 
-        getSitesList(sitesURL, options, function (result) {
-            getSeriesInformationPerSite(sitesURL, result, 0, function (result) {
+        getSitesList(APIURL, options, function (result) {
+            //getSeriesInformationPerSite(sitesURL, result, 0, function (result) {
                 res.view(null, result);
-            });
+            //});
+        });
+    },
+
+    seriesInformation: function (req, res) {
+        var siteID = req.params.siteID,
+            seriesURL = APIURL + '/' + siteID + '/variables/series';
+
+        getSeriesInformationPerSite(seriesURL, function (result) {
+            res.json(200, result);
         });
     },
 

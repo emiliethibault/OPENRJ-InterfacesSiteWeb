@@ -89,6 +89,11 @@ module.exports.routes = {
     action: 'sites'
   },
 
+  '/data-search/:siteID/series/information.json': {
+    controller: 'SitesController',
+    action: 'seriesInformation'
+  },
+
   '/data-search/:siteID/variables': {
     controller: 'VariablesController',
     action: 'variables'
@@ -98,17 +103,10 @@ module.exports.routes = {
     Hackathon
   */
 
-<<<<<<< HEAD
   /*'/hackathon': {
     controller: 'HackathonController',
     action: 'hackathon'
   },
-=======
-  // '/hackathon': {
-  //   controller: 'HackathonController',
-  //   action: 'hackathon'
-  // },
->>>>>>> fe413bc8c19399c86264ab513552ddda9840e2ec
 
   '/hackathon-contact': {
     controller: 'HackathonController',
