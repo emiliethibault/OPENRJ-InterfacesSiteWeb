@@ -24,48 +24,21 @@
             - (NOT OK) number of point
 -->
 <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.0/themes/smoothness/jquery-ui.css" />
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css" />
+
+
 
 <!-- WRAPPER -->
 <div id="wrapper">
 
     <section class="container top-no-header">
 
-        <div class="white-row">
+<!--############################################################################
 
-            <div class="row">
+        SITE DESCRIPTION
 
-                <h3 class="page-header nomargin-top margin-bottom40">
-                    <strong class="styleColor">Le CSTB à Sophia</strong>
-                </h3>
-                
-                <figure class="agent-figure pull-left hidden-xs">
-                    <img src="/images/community/cstb.jpg" height="210" alt="agent" />
-                </figure>
-
-                <!-- agent detail -->
-                <p>
-                    <strong class="styleSecondColor fsize17">Alpes-Maritimes (06)</strong>
-                </p>
-                <p>
-                    <span class="block fsize12">
-                        <i class="fa fa-download" title="download"></i>&nbsp;&nbsp;<strong>280 000</strong>
-                    </span>
-                    <span class="block fsize12">
-                        <i class="fa fa-rss" title="garage"></i>&nbsp;&nbsp;<strong>12</strong>
-                    </span>
-                    <span class="block fsize12">
-                        <i class="fa fa-calendar" title="calendar">&nbsp;&nbsp;</i><strong>23 Oct. 2013</strong> 
-                    </span>
-                </p>
-
-                <p class="fsize13">
-                    Partenaire du projet, le CSTB, organisme de recherche situé à Sophia Antipolis, met à disposition sur la plateforme ses données de consommations.
-                </p>
-
-            </div>
-        
-        </div>
-        <div class="white-row">
+#############################################################################-->    
+        <div class="white-row actual-site-information <%= site.extID %>">
             <div class="row">
 
                 <h3 class="page-header nomargin-top margin-bottom40">
@@ -78,21 +51,14 @@
 
                 <!-- agent detail -->
                 <p>
-                    <strong class="styleSecondColor fsize17"><%= site.location %></strong>
+                    <% if (site.location === '06') { %>
+                        <strong class="styleSecondColor fsize17">Alpes-Maritimes (06)</strong>
+                    <% } else { %>
+                        <strong class="styleSecondColor fsize17"><%= site.location %></strong>
+                    <% } %>
                 </p>
-                <p>
-                    <span class="block fsize12">
-                        <i class="fa fa-download" title="download"></i>&nbsp;&nbsp;<strong><%= site.seriesCount %></strong>
-                    </span>
-                    <span class="block fsize12">
-                        <i class="fa fa-rss" title="garage"></i>&nbsp;&nbsp;<strong><%= site.variablesNumber %></strong>
-                    </span>
-                    <span class="block fsize12">
-                        <i class="fa fa-calendar" title="calendar">&nbsp;&nbsp;</i><strong><%= site.beginDate %></strong> 
-                    </span>
-                    <span class="block fsize12">
-                        <i class="fa fa-calendar" title="calendar">&nbsp;&nbsp;</i><strong><%= site.endDate %></strong> 
-                    </span>
+                <p class="series-information">
+                    <img src="/images/loading.gif" alt="loading" />
                 </p>
 
                 <p class="fsize13">
@@ -103,47 +69,58 @@
         
         </div>
         
-        <!-- Variables list -->
+<!--############################################################################
+
+        Variables list
+
+#############################################################################-->
         <div class="white-row">
             <div class="row">
                 <h3 class="page-header nomargin-top margin-bottom40">
                     <strong class="styleColor">Variables</strong>
                 </h3>
-                <table class="table table-bordered table-hover table-responsive table-striped">
+                <% if (variables.length === 0) { %>
+                    <p class="fsize13">
+                        Ce site ne contient aucune variable, ni aucune série temporelle pour le moment.
+                    </p>
+                <% } else { %>
+                <div style="text-align: center;" class="loading-variables-list">
+                    <img src="/images/loading.gif" alt="loading" />
+                </div>
+                <table id="table-variables-list" class="table table-bordered table-hover table-responsive table-striped hidden">
                     <thead>
                         <tr>
                             <th>Variable ID</th>
                             <th>Label</th>
-                            <th>Type - Unité</th>
-                            <th>Bornes inférieur et supérieur</th>
-                            <th>Deltas minimum et maximum</th>
+                            <th>Type</th>
+                            <th>Unité</th>
                             <th>Période</th>
-                            <th>Nombre de point de mesure</th>
+                            <th>Nombre de mesure</th>
                         </tr>
                     </thead>
                     <tbody>
                         <% _.each(variables, function (variable) { %>
-                        <tr>
-                            <td rowspan="2"><a href="#chart"><%= variable.extID %></a></td>
-                            <td rowspan="2"><%= variable.label %></td>
+                        <tr class="<%= variable.extID %>-informations">
+                            <td><a href="#chart"><%= variable.extID %></a></td>
+                            <td><%= variable.label %></td>
                             <td><%= variable.type %> (<%= variable.valueType %>)</td>
-                            <td><%= variable.lowerBound %></td>
-                            <td><%= variable.deltaMin %></td>
-                            <td>23 Oct. 13</td>
-                            <td rowspan="2">654000</td>
-                        </tr>
-                        <tr>
                             <td><%= variable.unit %></td>
-                            <td><%= variable.upperBound %></td>
-                            <td><%= variable.deltaMax %></td>
-                            <td>5 Aout 14</td>
+                            <td class="<%= variable.id %>-period"></td>
+                            <td class="<%= variable.id %>-series-number"></td>
                         </tr>
                         <% }) %>
                     </tbody>
                 </table>
+                <% } %>
             </div>
         </div><!-- /Variables list -->
 
+<!--############################################################################
+
+        Chart
+
+#############################################################################-->
+        <% if (displayedVariable !== undefined) { %>
         <div class="row">
 
             <!-- center column -->
@@ -151,7 +128,7 @@
                 <div class="white-row">
 
                     <h3 class="page-header nomargin-top margin-bottom40">
-                        <strong class="styleColor">test1</strong>
+                        <strong class="styleColor"><%= displayedVariable.label %></strong>
                     </h3>
 
                     <!-- 
@@ -168,8 +145,6 @@
 
             <!-- side column -->
             <div class="col-md-4">
-
-
 
                 <form id="re-filter" action="/data-search/CSTB_SOPHIA/variables" method="get" class="white-row">
 
@@ -196,7 +171,7 @@
                         <div class="form-group">
                             <div class="col-md-12 col-sm-6">
                                 <label>Label</label>
-                                <select class="form-control" name="re_location">
+                                <select class="form-control" name="variable">
                                 <% _.each(variables, function (variable) { %>
                                     <% if (variable.extID !== displayedVariable.extID) { %>
                                     <option value="<%= variable.extID %>"><%= variable.label %></option>   
@@ -251,16 +226,139 @@
 
                 </form>
             </div>
-
         </div>
-
+        <% } %>
     </section>
 </div>
 
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
-<script>
-    $(function() {
+<script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+<script src="/js/moment.js"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+<script type="text/html" id="template-series-information">
+    <span class="block fsize12">
+        <i class="fa fa-download" title="download"></i>&nbsp;&nbsp;<strong>SERIESCOUNT</strong>
+    </span>
+    <span class="block fsize12">
+        <i class="fa fa-rss" title="garage"></i>&nbsp;&nbsp;<strong>VARIABLENUMBER</strong>
+    </span>
+</script>
+
+<script type="text/html" id="template-series-information-calendar">
+    <span class="block fsize12">
+        <i class="fa fa-calendar" title="calendar">&nbsp;&nbsp;</i><strong>DATE</strong> 
+    </span>
+</script>
+
+<script type="text/javascript">
+    
+    google.load("visualization", "1", {packages:["corechart"]});
+    google.setOnLoadCallback(drawChart);
+
+    var SITEIDKEY = 'SITEID',
+        URLBASE = '/sites/'+ SITEIDKEY +'/series/information.json',
+        SERIESURLBASE = '/sites/'+ SITEIDKEY +'/variables/*/series',
+        FROM = '2013-08-01T00:00:00.000Z',
+        TO = '2014-08-08T00:00:00.000Z',
+        getSeriesInformation = function (seriesURL, callback) {
+            
+        $.ajax({
+            type: 'GET',
+            url: seriesURL
+        }).done(function (result) {
+            callback(result);
+        });
+    },
+        updateSeriesInformationHTML = function (result) {
+        var htmlTemplate = $('#template-series-information').clone().html(),
+            beginDateTemplate = $('#template-series-information-calendar').clone().html(),
+            endDateTemplate = $('#template-series-information-calendar').clone().html();
+
+        htmlTemplate = htmlTemplate.replace('SERIESCOUNT', result.seriesCount);
+        htmlTemplate = htmlTemplate.replace('VARIABLENUMBER', result.variablesNumber);
+        if (result.beginDate !== '' && result.endDate !== '') {
+            htmlTemplate += beginDateTemplate.replace('DATE', result.beginDate);
+            htmlTemplate += endDateTemplate.replace('DATE', result.endDate);
+        }
+        $('.series-information').html(htmlTemplate);
+    },
+        updateVariableSeriesInformationHTML = function (variables, callback) {
+        variables = JSON.parse(variables);
+        variables = variables.result;
+        for (var i = 0 ; i < variables.length ; i++) {
+            moment.locale('fr');
+        
+            var dateFormatIn = 'YYYY-MM-DDTHH:mm:ss.fffZ',
+                dateFormatout = 'D MMM YYYY',
+                beginDate = moment(variables[i].series[0].isodate, dateFormatIn).format(dateFormatout),
+                endDate = moment(variables[i].series[0].isodate, dateFormatIn).format(dateFormatout),
+                seriesNumber = variables[i].count,
+                perioClass = '.' + variables[i].variableID+ '-period',
+                seriesNumberClass = '.' + variables[i].variableID+ '-series-number';
+            $(perioClass).html(beginDate +' - '+ endDate);
+            $(seriesNumberClass).html(seriesNumber);
+        }
+        callback();
+    },
+        loadVariableTable = function () {
+        $('#table-variables-list').dataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/725b2a2115b/i18n/French.json"
+            }
+        });
+        $('#table-variables-list').removeClass('hidden');
+        $('.loading-variables-list').addClass('hidden');
+    },
+        drawChart = function (seriesFromTo) {
+        
+        var data = new google.visualization.DataTable(),
+            seriesArray = [];
+      
+        seriesFromTo = JSON.parse(seriesFromTo);
+        seriesFromTo = seriesFromTo.result[0];
+
+        // Declare columns
+        data.addColumn('datetime', 'Time of Day');
+        data.addColumn('number', 'Some Measurement');
+      
+        for (var i = 0 ; i < seriesFromTo.series.length ; i++) {
+            seriesArray.push([new Date(seriesFromTo.series[i].isodate), parseInt(seriesFromTo.series[i].value)]);
+        }
+
+        // Add data.
+        data.addRows(seriesArray);
+      
+        // Create and draw the visualization.
+        new google.visualization.LineChart(document.getElementById('chart')).
+            draw(data, {curveType: "function",
+                        width: 500, height: 400,
+                        vAxis: {maxValue: 10}}
+                );
+    };
+
+    $('document').ready(function () {
+        var sites_list = $('.actual-site-information'),
+            siteID = sites_list[0].className.replace('white-row actual-site-information ', ''),
+            siteIDURL = URLBASE.replace(SITEIDKEY, siteID),
+            siteSeriesURL = SERIESURLBASE.replace(SITEIDKEY, siteID),
+            seriesFromToURL = siteSeriesURL.replace('*', 'energy_aircond_2');
+
+        seriesFromToURL += '?from='+ FROM +'&to='+ TO;
+
+        getSeriesInformation(siteIDURL, function (result) {
+            updateSeriesInformationHTML(result);
+            getSeriesInformation(siteSeriesURL, function (series) {
+                updateVariableSeriesInformationHTML(series, function () {
+                    loadVariableTable();
+                });
+                getSeriesInformation(seriesFromToURL, function (seriesFromTo) {
+                    drawChart(seriesFromTo);
+                });
+            });
+        });
+
         $( "#datepickerBeginDate" ).datepicker();
         $( "#datepickerEndDate" ).datepicker();
     });

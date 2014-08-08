@@ -55,7 +55,7 @@
                     <div class="col-md-4">
                         <div class="item-box site-item-box <%= site.extID %>">
                             <figure>
-                                <a class="item-hover" href="/data-search/<%= site.extID %>/variables">
+                                <a class="item-hover" href="/sites/<%= site.extID %>/variables">
                                     <span class="overlay color2"></span>
                                     <span class="inner">
                                         <span class="block fa fa-plus fsize20"></span>
@@ -146,7 +146,7 @@
 <script type="text/javascript">
     
     var SITEIDKEY = 'SITEID',
-        URLBASE = '/data-search/'+ SITEIDKEY +'/series/information.json',
+        URLBASE = '/sites/'+ SITEIDKEY +'/series/information.json',
         getSeriesInformationPerSite = function (siteID, seriesURL, callback) {
             
         $.ajax({

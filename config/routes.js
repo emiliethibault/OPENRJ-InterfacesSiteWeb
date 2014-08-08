@@ -84,19 +84,24 @@ module.exports.routes = {
     Data
   */
 
-  '/data-search': {
+  '/sites': {
     controller: 'SitesController',
     action: 'sites'
   },
 
-  '/data-search/:siteID/series/information.json': {
+  '/sites/:siteID/series/information.json': {
     controller: 'SitesController',
     action: 'seriesInformation'
   },
 
-  '/data-search/:siteID/variables': {
+  '/sites/:siteID/variables': {
     controller: 'VariablesController',
     action: 'variables'
+  },
+
+  '/sites/:siteID/variables/:variableID/series': {
+    controller: 'VariablesController',
+    action: 'series'
   },
 
   /*
