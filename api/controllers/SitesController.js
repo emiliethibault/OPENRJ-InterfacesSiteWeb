@@ -15,15 +15,18 @@
  * @docs        :: http://sailsjs.org/#!documentation/controllers
  */
 
+'use strict';
+
 var request = require('request'),
     moment = require('moment'),
+    DATE_FORMAT_OUT = 'D MMM YYYY',
     getSitesList = function (url, result, callback) {
         request(url, function (error, response, body) {
             if (!error && response.statusCode === 200) {
                 body = JSON.parse(body);
-                result['sites'] = body.sites;
+                result.sites = body.sites;
             } else {
-                result['sites'] = [];
+                result.sites = [];
             }
 
             callback(result);
@@ -34,39 +37,59 @@ var request = require('request'),
         moment.locale('fr');
         
         var dateFormatIn = 'YYYY-MM-DDTHH:mm:ss.fffZ',
-            dateFormatout = 'D MMM YYYY',
-            newBeginDate = moment(variable.series[0].isodate, dateFormatIn).format(dateFormatout),
-            newEndDate = moment(variable.series[0].isodate, dateFormatIn).format(dateFormatout);
+            newStartDate = moment(variable.startDate, dateFormatIn),
+            newEndDate = moment(variable.endDate, dateFormatIn);
         
-        site['seriesCount'] += variable.count;
-        if (site['beginDate'] === '' || site['beginDate'] > newBeginDate) {
-            site['beginDate'] = newBeginDate;
+        site.seriesCount += variable.count;
+        if (site.startDate === '' || site.startDate > newStartDate) {
+            site.startDate = newStartDate;
         }
-        if (site['endDate'] === '' || site['endDate'] < newEndDate) {
-            site['endDate'] = newEndDate;
+        if (site.endDate === '' || site.endDate < newEndDate) {
+            site.endDate = newEndDate;
         }
     },
-    getSeriesInformationPerSite = function (seriesURL, callback) {           
+    getVariablesNumber = function (variablesURL, callback) {
+        
+        request(variablesURL, function (error, response, body) {
+
+            var variables = [];
+
+            if (!error && response.statusCode === 200) {
+                body = JSON.parse(body);
+                variables = body.variables;
+            }
+            
+            callback(variables.length);
+        });
+    },
+    getSeriesInformationPerSite = function (variablesURL, seriesURL, callback) {           
         var result = {
             'seriesCount': 0,
             'variablesNumber': 0,
-            'beginDate': '',
+            'startDate': '',
             'endDate': ''
         };
         
         request(seriesURL, function (error, response, body) {
+
             if (!error && response.statusCode === 200) {
                 body = JSON.parse(body);
                 var variables = body.result;
-                if (variables.length) {
-                    result.variablesNumber = variables.length;
-                }
                 for (var i = 0 ; i < variables.length ; i++) {
                     updateSeriesInformation(result, variables[i]);
                 }
+                if (result.startDate !== '') {
+                    result.startDate = result.startDate.format(DATE_FORMAT_OUT);
+                }
+                if (result.endDate !== '') {
+                    result.endDate = result.endDate.format(DATE_FORMAT_OUT);
+                }
             }
 
-            callback(result);
+            getVariablesNumber(variablesURL, function (variablesNumber) {
+                result.variablesNumber = variablesNumber;
+                callback(result);
+            });
         });
     },
     APIURL = 'https://api.openrj.eu/v1/sites';
@@ -89,12 +112,18 @@ module.exports = {
 
     seriesInformation: function (req, res) {
         var siteID = req.params.siteID,
-            seriesURL = APIURL + '/' + siteID + '/variables/series';
+            variablesURL = APIURL + '/' + siteID + '/variables',
+            seriesURL = variablesURL + '/series';
 
-        getSeriesInformationPerSite(seriesURL, function (result) {
+        getSeriesInformationPerSite(variablesURL, seriesURL, function (result) {
             res.json(200, result);
         });
     },
+
+
+    getSeriesInformationPerSite: getSeriesInformationPerSite,
+    updateSeriesInformation: updateSeriesInformation,
+    getSitesList: getSitesList,
 
 
   /**

@@ -20,6 +20,8 @@
  *      since if this was triggered from an AJAX or socket request, JSON should be sent instead.
  */
 
+'use strict';
+
 module.exports[400] = function badRequest(validationErrors, redirectTo, req, res) {
 
   /*

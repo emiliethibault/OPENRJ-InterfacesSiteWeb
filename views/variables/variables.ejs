@@ -100,7 +100,7 @@
                     </thead>
                     <tbody>
                         <% _.each(variables, function (variable) { %>
-                        <tr class="<%= variable.extID %>-informations">
+                        <tr class="<%= variable.id %>-informations">
                             <td><a href="#chart"><%= variable.extID %></a></td>
                             <td><%= variable.label %></td>
                             <td><%= variable.type %> (<%= variable.valueType %>)</td>
@@ -111,6 +111,30 @@
                         <% }) %>
                     </tbody>
                 </table>
+                <div id="div-variables-list" class="hidden">
+
+                <!-- This div contains information about variables (avoid to use several API request to retrieve this information) -->
+                    <% _.each(variables, function (variable) { %>
+                        <div class="<%= variable.id %>-informations">
+                            <p class="<%= variable.id %>-ext-id"><%= variable.extID %></p>
+                            <p class="<%= variable.id %>-label"><%= variable.label %></p>
+                            <p class="<%= variable.id %>-type"><%= variable.type %> (<%= variable.valueType %>)</p>
+                            <p class="<%= variable.id %>-unit"><%= variable.unit %></p>
+                            <p class="<%= variable.id %>-start-date"></p>
+                            <p class="<%= variable.id %>-end-date"></p>
+                            <p class="<%= variable.id %>-series-number"></p>
+                            <% if (!variable.lowerBound) {variable.lowerBound = '';}%>
+                            <% if (!variable.upperBound) {variable.upperBound = '';}%>
+                            <% if (!variable.deltaMin) {variable.deltaMin = '';}%>
+                            <% if (!variable.deltaMax) {variable.deltaMax = '';}%>
+                            <p class="<%= variable.id %>-lower-bound"><%= variable.lowerBound %></p>
+                            <p class="<%= variable.id %>-upper-bound"><%= variable.upperBound %></p>
+                            <p class="<%= variable.id %>-delta-min"><%= variable.deltaMin %></p>
+                            <p class="<%= variable.id %>-delta-max"><%= variable.deltaMax %></p>
+                            
+                        </div>
+                    <% }) %>
+                </div>
                 <% } %>
             </div>
         </div><!-- /Variables list -->
@@ -127,18 +151,61 @@
             <div class="col-md-8">
                 <div class="white-row">
 
-                    <h3 class="page-header nomargin-top margin-bottom40">
-                        <strong class="styleColor"><%= displayedVariable.label %></strong>
-                    </h3>
+                    <form id="variables-chart-filter" action="/data-search/CSTB_SOPHIA/variables" method="get" class="<%= displayedVariable.id %>">
 
-                    <!-- 
-                        carousel 
-                        900px images required!
-                    -->
-                    <div id="chart" style="height: 490px;">
-                        
-                    </div>
-                    <!-- /carousel -->
+                        <!-- FILTER / SEARCH -->
+                        <h3 class="page-header nomargin-top margin-bottom40">
+                            <strong class="styleColor">Courbe</strong>
+                        </h3>
+
+                        <div style="text-align: center;" class="loading-variables-list">
+                            <img src="/images/loading.gif" alt="loading" />
+                        </div>
+
+                        <div class="filter-properties hidden">
+                            <div class="row">
+                                <div class="form-group">
+
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <label>Label</label>
+                                        <select id="variables-chart-selector" class="form-control" name="variable">
+                                        <% _.each(variables, function (variable) { %>
+                                            <% if (variable.extID !== displayedVariable.extID) { %>
+                                            <option value="<%= variable.id %>"><%= variable.label %></option>   
+                                            <% } else { %>
+                                            <option value="<%= variable.id %>" SELECTED><%= variable.label %></option>
+                                            <% } %>
+                                        <% }) %>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-2 col-sm-2 col-xs-12">
+                                        <label>Mesures</label>
+                                        <input type="text" class="form-control chart-series-number" name="chart-series-number" value="" disabled/>
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-3 col-xs-12">
+                                        <label>Début période</label>
+                                        <input type="text" class="form-control" id="datepickerBeginDate">
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-3 col-xs-12">
+                                        <label>Fin période</label>
+                                        <input type="text" class="form-control" id="datepickerEndDate">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group">
+                                    <div id="chart" style="height: 450px;" class="col-md-12 col-sm-12 col-xs-12">
+                                        <div style="text-align: center;">
+                                            <img src="/images/loading.gif" alt="loading" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>                      
 
             </div>
@@ -146,84 +213,84 @@
             <!-- side column -->
             <div class="col-md-4">
 
-                <form id="re-filter" action="/data-search/CSTB_SOPHIA/variables" method="get" class="white-row">
+                <form id="variables-chart-filter" action="/data-search/CSTB_SOPHIA/variables" method="get" class="white-row <%= displayedVariable.id %>">
 
                     <!-- FILTER / SEARCH -->
                     <h3 class="page-header nomargin-top margin-bottom40">
-                        <strong class="styleColor">Filtres</strong>
+                        <strong class="styleColor">Informations sur la variable</strong>
                     </h3>
 
-                    <div class="row">
-                        <div class="form-group">
+                    <div style="text-align: center;" class="loading-variables-list">
+                        <img src="/images/loading.gif" alt="loading" />
+                    </div>
 
-                            <div class="col-md-6 col-sm-6 col-xs-6">
-                                <label>Début période (inclue)</label>
-                                <input type="text" class="form-control" id="datepickerBeginDate">
+                    <div class="filter-properties hidden">
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-md-12 col-sm-6">
+                                    <label>Nombre de mesure totale</label>
+                                    <input type="text" class="form-control variable-series-number" name="variable-series-number" value="" disabled/>
+                                </div>
                             </div>
-                            <div class="col-md-6 col-sm-6 col-xs-6">
-                                <label>Fin période (exclue)</label>
-                                <input type="text" class="form-control" id="datepickerEndDate">
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-md-12 col-sm-6">
+                                    <label>Début période</label>
+                                    <input type="text" class="form-control variable-start-date" name="variable-start-date" value="" disabled/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-md-12 col-sm-6">
+                                    <label>Fin période</label>
+                                    <input type="text" class="form-control variable-end-date" name="variable-end-date" value="" disabled/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <label>Type</label>
+                                    <input type="text" class="form-control variable-type" name="variable-type" value="<%= displayedVariable.type %> (<%= displayedVariable.valueType %>)" disabled/>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <label>Unité</label>
+                                    <input type="text" class="form-control variable-unit" name="variable-unit" value="<%= displayedVariable.unit %>" disabled/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <label>Borne inf.</label>
+                                    <% if (displayedVariable.lowerBound) { displayedVariable.lowerBound = '' } %>
+                                    <input type="text" class="form-control variable-lower-bound" name="variable-lower-bound" value="<%= displayedVariable.lowerBound %>" disabled/>
+                                </div>
+
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <label>Borne sup.</label>
+                                    <% if (displayedVariable.upperBound) { displayedVariable.upperBound = '' } %>
+                                    <input type="text" class="form-control variable-upper-bound" name="variable-upper-bound" value="<%= displayedVariable.upperBound %>" disabled/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">    
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <label>Delta min.</label>
+                                    <% if (displayedVariable.deltaMin) { displayedVariable.deltaMin = '' } %>
+                                    <input type="text" class="form-control variable-delta-min" name="re_id" value="<%= displayedVariable.deltaMin %>" disabled/>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <label>Delta max.</label>
+                                    <% if (displayedVariable.deltaMax) { displayedVariable.deltaMax = '' }%>
+                                    <input type="text" class="form-control variable-delta-max" name="variable-delta-max" value="<%= displayedVariable.deltaMax %>" disabled/>
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="row">
-                        <div class="form-group">
-                            <div class="col-md-12 col-sm-6">
-                                <label>Label</label>
-                                <select class="form-control" name="variable">
-                                <% _.each(variables, function (variable) { %>
-                                    <% if (variable.extID !== displayedVariable.extID) { %>
-                                    <option value="<%= variable.extID %>"><%= variable.label %></option>   
-                                    <% } else { %>
-                                    <option value="<%= variable.extID %>" SELECTED><%= variable.label %></option>
-                                    <% } %>
-                                <% }) %>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="form-group">
-                            <div class="col-md-6 col-sm-6 col-xs-6">
-                                <label>Type</label>
-                                <input type="text" class="form-control" name="re_id" value="<%= displayedVariable.type %> (<%= displayedVariable.valueType %>)" disabled/>
-                            </div>
-                            <div class="col-md-6 col-sm-6 col-xs-6">
-                                <label>Unité</label>
-                                <input type="text" class="form-control" name="re_id" value="<%= displayedVariable.unit %>" disabled/>
-                            </div>
-                        
-                            <div class="col-md-6 col-sm-6 col-xs-6">
-                                <label>Borne inf.</label>
-                                <input type="text" class="form-control" name="re_id" value="<%= displayedVariable.lowerBound %>" disabled/>
-                            </div>
-                            <div class="col-md-6 col-sm-6 col-xs-6">
-                                <label>Borne sup.</label>
-                                <input type="text" class="form-control" name="re_id" value="<%= displayedVariable.upperBound %>" disabled/>
-                            </div>
-                        
-                            <div class="col-md-6 col-sm-6 col-xs-6">
-                                <label>Delta min.</label>
-                                <input type="text" class="form-control" name="re_id" value="<%= displayedVariable.deltaMin %>" disabled/>
-                            </div>
-                            <div class="col-md-6 col-sm-6 col-xs-6">
-                                <label>Delta max.</label>
-                                <input type="text" class="form-control" name="re_id" value="<%= displayedVariable.deltaMax %>" disabled/>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="form-group">
-                            <div class="col-md-12">
-                                <label>&nbsp;</label>
-                                <button class="btn btn-primary fullwidth">FILTRER</button>
-                            </div>
-                        </div>
-                    </div>
-
                 </form>
             </div>
         </div>
@@ -233,6 +300,7 @@
 
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+<script src="/js/fr_regional_datepicker.js"></script>
 <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
 <script src="/js/moment.js"></script>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
@@ -260,9 +328,9 @@
     var SITEIDKEY = 'SITEID',
         URLBASE = '/sites/'+ SITEIDKEY +'/series/information.json',
         SERIESURLBASE = '/sites/'+ SITEIDKEY +'/variables/*/series',
-        FROM = '2013-08-01T00:00:00.000Z',
-        TO = '2014-08-08T00:00:00.000Z',
-        getSeriesInformation = function (seriesURL, callback) {
+        FROM = moment().subtract(365, 'days').format(),
+        TO = moment().format(),
+        ajaxRequest = function (seriesURL, callback) {
             
         $.ajax({
             type: 'GET',
@@ -279,12 +347,33 @@
         htmlTemplate = htmlTemplate.replace('SERIESCOUNT', result.seriesCount);
         htmlTemplate = htmlTemplate.replace('VARIABLENUMBER', result.variablesNumber);
         if (result.beginDate !== '' && result.endDate !== '') {
-            htmlTemplate += beginDateTemplate.replace('DATE', result.beginDate);
+            htmlTemplate += beginDateTemplate.replace('DATE', result.startDate);
             htmlTemplate += endDateTemplate.replace('DATE', result.endDate);
         }
         $('.series-information').html(htmlTemplate);
     },
+        changeVariableFilterInformation = function (variableID) {
+            var rowName = '#div-variables-list .'+variableID+'-informations',
+                selectName = '#variables-chart-filter'
+                classElement = [
+                    '-type',
+                    '-unit',
+                    '-start-date',
+                    '-end-date',
+                    '-series-number',
+                    '-lower-bound',
+                    '-upper-bound',
+                    '-delta-min',
+                    '-delta-max'
+                ];
+            
+            for (var i = 0 ; i < classElement.length ; i++) {
+                $(selectName + ' .variable' + classElement[i]).val($(rowName + ' .'+variableID+classElement[i]).html());
+            }
+    },
         updateVariableSeriesInformationHTML = function (variables, callback) {
+        var displayedVariableID = $('#variables-chart-filter')[0].className.replace('white-row ', '');
+
         variables = JSON.parse(variables);
         variables = variables.result;
         for (var i = 0 ; i < variables.length ; i++) {
@@ -292,13 +381,24 @@
         
             var dateFormatIn = 'YYYY-MM-DDTHH:mm:ss.fffZ',
                 dateFormatout = 'D MMM YYYY',
-                beginDate = moment(variables[i].series[0].isodate, dateFormatIn).format(dateFormatout),
-                endDate = moment(variables[i].series[0].isodate, dateFormatIn).format(dateFormatout),
+                beginDate = moment(variables[i].startDate, dateFormatIn).format(dateFormatout),
+                endDate = moment(variables[i].endDate, dateFormatIn).format(dateFormatout),
                 seriesNumber = variables[i].count,
+                startDateClass = '.' + variables[i].variableID+ '-start-date',
+                endDateClass = '.' + variables[i].variableID+ '-end-date',
                 perioClass = '.' + variables[i].variableID+ '-period',
                 seriesNumberClass = '.' + variables[i].variableID+ '-series-number';
             $(perioClass).html(beginDate +' - '+ endDate);
             $(seriesNumberClass).html(seriesNumber);
+            $(startDateClass).html(beginDate);
+            $(endDateClass).html(endDate);
+
+
+            if (variables[i].variableID === displayedVariableID) {
+                $('#variables-chart-filter .variable-start-date').val(beginDate);
+                $('#variables-chart-filter .variable-end-date').val(endDate);
+                $('#variables-chart-filter .variable-series-number').val(seriesNumber);
+            }
         }
         callback();
     },
@@ -309,33 +409,58 @@
             }
         });
         $('#table-variables-list').removeClass('hidden');
+        $('#variables-chart-filter .filter-properties').removeClass('hidden');
         $('.loading-variables-list').addClass('hidden');
     },
-        drawChart = function (seriesFromTo) {
+        drawChart = function (seriesFromTo, fromDate, toDate) {
         
         var data = new google.visualization.DataTable(),
             seriesArray = [];
       
         seriesFromTo = JSON.parse(seriesFromTo);
-        seriesFromTo = seriesFromTo.result[0];
 
+        console.log(seriesFromTo);
+
+        if (seriesFromTo.result.length > 0) {
+            seriesFromTo = seriesFromTo.result[0];
+
+            for (var i = 0 ; i < seriesFromTo.series.length ; i++) {
+                seriesArray.push([new Date(seriesFromTo.series[i].isodate), parseInt(seriesFromTo.series[i].value)]);
+            }
+        }
+        $('.chart-series-number').val(seriesArray.length);
         // Declare columns
         data.addColumn('datetime', 'Time of Day');
-        data.addColumn('number', 'Some Measurement');
-      
-        for (var i = 0 ; i < seriesFromTo.series.length ; i++) {
-            seriesArray.push([new Date(seriesFromTo.series[i].isodate), parseInt(seriesFromTo.series[i].value)]);
-        }
-
+        data.addColumn('number', 'Consommation');
         // Add data.
         data.addRows(seriesArray);
-      
+
         // Create and draw the visualization.
-        new google.visualization.LineChart(document.getElementById('chart')).
-            draw(data, {curveType: "function",
-                        width: 500, height: 400,
-                        vAxis: {maxValue: 10}}
-                );
+        new google.visualization.AreaChart(document.getElementById('chart')).draw(
+            data,
+            {
+                curveType: 'function',
+                hAxis: {
+                    maxValue: new Date(toDate),
+                    minValue: new Date(fromDate)
+                },
+                vAxis: {
+                    minValue: 0,
+                    minValue: 10
+                },
+                colors: ['#a0d0e0', '#3c8dbc'],
+                chartArea:{
+                    width: '85%',
+                    height: '90%'
+                },
+                legend: {
+                    position: 'top',
+                    textStyle: {
+                        fontSize: 16
+                    }
+                }
+            }
+        );
     };
 
     $('document').ready(function () {
@@ -343,23 +468,50 @@
             siteID = sites_list[0].className.replace('white-row actual-site-information ', ''),
             siteIDURL = URLBASE.replace(SITEIDKEY, siteID),
             siteSeriesURL = SERIESURLBASE.replace(SITEIDKEY, siteID),
-            seriesFromToURL = siteSeriesURL.replace('*', 'energy_aircond_2');
+            displayedVariableID = $('#variables-chart-filter')[0].className.replace('white-row ', ''),
+            seriesFromToURL = siteSeriesURL.replace('*', displayedVariableID) + '?from='+ FROM +'&to='+ TO;
 
-        seriesFromToURL += '?from='+ FROM +'&to='+ TO;
-
-        getSeriesInformation(siteIDURL, function (result) {
+        ajaxRequest(siteIDURL, function (result) {
             updateSeriesInformationHTML(result);
-            getSeriesInformation(siteSeriesURL, function (series) {
+            ajaxRequest(siteSeriesURL, function (series) {
                 updateVariableSeriesInformationHTML(series, function () {
                     loadVariableTable();
                 });
-                getSeriesInformation(seriesFromToURL, function (seriesFromTo) {
-                    drawChart(seriesFromTo);
+                ajaxRequest(seriesFromToURL, function (seriesFromTo) {
+                    drawChart(seriesFromTo, FROM, TO);
                 });
             });
         });
 
-        $( "#datepickerBeginDate" ).datepicker();
-        $( "#datepickerEndDate" ).datepicker();
+        $('#variables-chart-selector').change(function () {
+            var variableID = $(this).val(),
+                rowName = '#div-variables-list .'+variableID+'-informations'
+                variableLabel = $(rowName + ' .'+variableID+'-label').html(),
+                siteID = sites_list[0].className.replace('white-row actual-site-information ', ''),
+                siteIDURL = URLBASE.replace(SITEIDKEY, siteID),
+                siteSeriesURL = SERIESURLBASE.replace(SITEIDKEY, siteID),
+                seriesFromToURL = siteSeriesURL.replace('*', variableID) + '?from='+ FROM +'&to='+ TO;
+
+            changeVariableFilterInformation(variableID);
+
+            $('#chart').html('<div style="text-align: center;"><img src="/images/loading.gif" alt="loading" /></div>');
+            $('.chart-variable-label').html(variableLabel);
+            ajaxRequest(seriesFromToURL, function (seriesFromTo) {
+                drawChart(seriesFromTo, FROM, TO);
+            });
+        });
+        $('#datepickerBeginDate').datepicker({
+            onSelect: function(dateText) {
+                console.log("Selected date: " + dateText + "; input's current value: " + this.value);
+            }
+        });
+        $('#datepickerEndDate').datepicker({
+            onSelect: function(dateText) {
+                console.log("Selected date: " + dateText + "; input's current value: " + this.value);
+            }
+        });
+        
+        $('#datepickerBeginDate').datepicker('setDate', new Date(FROM));
+        $('#datepickerEndDate').datepicker('setDate', new Date(TO));
     });
 </script>

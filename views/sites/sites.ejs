@@ -19,25 +19,6 @@
         <div id="gmap_default"><!-- google map --></div>
 
         <script type="text/javascript" src="//maps.google.com/maps/api/js?sensor=true&amp;#038;ver=3.8.1"></script>
-        <script type="text/javascript">
-            function initialize_property_map(){
-                var propertyLocation = new google.maps.LatLng(43.6732936, 6.8782122);
-                var propertyMapOptions = {
-                    center: propertyLocation,
-                    zoom: 5,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP,
-                    scrollwheel: false
-                };
-                var propertyMap = new google.maps.Map(document.getElementById("gmap_default"), propertyMapOptions);
-                var propertyMarker = new google.maps.Marker({
-                    position: propertyLocation,
-                    map: propertyMap
-                    //, icon: "assets/images/icons/realestate/map.png"
-                });
-            }
-
-            window.onload = initialize_property_map();
-        </script>
     </section>
 
     <section class="container">
@@ -72,7 +53,11 @@
                                     <small><%= site.location %></small>
                                 <% } %>
                                 <p class="site-description">
+                                    <%if (site.description.length >= 75) { %>
+                                    <%= site.description.substring(0, 74) + ' ...' %>
+                                    <% } else { %>
                                     <%= site.description %>
+                                    <% } %>
                                 </p>
                                 <p style="text-align: right;" class="row">
                                     <span class="fsize12 pull-right <%= site.extID %>-series-informations-number list-series-informations"></span>
@@ -164,8 +149,8 @@
 
             htmlTemplate = htmlTemplate.replace('SERIESCOUNT', result.seriesCount);
             htmlTemplate = htmlTemplate.replace('VARIABLENUMBER', result.variablesNumber);
-            if (result.beginDate !== '' && result.endDate !== '') {
-                dateTemplate += beginDateTemplate.replace('DATE', result.beginDate);
+            if (result.startDate !== '' && result.endDate !== '') {
+                dateTemplate += beginDateTemplate.replace('DATE', result.startDate);
                 dateTemplate += endDateTemplate.replace('DATE', result.endDate);
             }
             $('.'+siteID+'-series-informations-number').html(htmlTemplate);
@@ -183,4 +168,30 @@
             });
         }
     });
+</script>
+
+<script type="text/javascript">
+    function initialize_property_map(){
+        var propertyLocation = new google.maps.LatLng(43.6732936, 6.8782122);
+        var propertyLocation2 = new google.maps.LatLng(43.295237, -0.368205);
+        var propertyMapOptions = {
+            center: propertyLocation,
+            zoom: 5,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            scrollwheel: false
+        };
+        var propertyMap = new google.maps.Map(document.getElementById("gmap_default"), propertyMapOptions);
+        var propertyMarker = new google.maps.Marker({
+            position: propertyLocation,
+            map: propertyMap
+            //, icon: "assets/images/icons/realestate/map.png"
+        });
+        var propertyMarker2 = new google.maps.Marker({
+            position: propertyLocation2,
+            map: propertyMap
+            //, icon: "assets/images/icons/realestate/map.png"
+        });
+    }
+
+    window.onload = initialize_property_map();
 </script>

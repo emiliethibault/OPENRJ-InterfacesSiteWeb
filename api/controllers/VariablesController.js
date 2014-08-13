@@ -15,14 +15,16 @@
  * @docs        :: http://sailsjs.org/#!documentation/controllers
  */
 
+'use strict';
+
 var request = require('request'),
     getSiteInformation = function (url, result, callback) {
         request(url, function (error, response, body) {
             if (!error && response.statusCode === 200) {
                 body = JSON.parse(body);
-                result['site'] = body.sites[0];
+                result.site = body.sites[0];
             } else {
-                result['site'] = {};
+                result.site = {};
             }
 
             callback(result);
@@ -33,9 +35,9 @@ var request = require('request'),
         request(url, function (error, response, body) {
             if (!error && response.statusCode === 200) {
                 body = JSON.parse(body);
-                result['variables'] = body.variables;
+                result.variables = body.variables;
             } else {
-                result['variables'] = [];
+                result.variables = [];
             }
 
             callback(result);
@@ -60,9 +62,9 @@ module.exports = {
         getSiteInformation(siteURL, options, function (result) {
             getVariablesList(variablesURL, result, function (newResult) {
                 if (newResult.variables.length > 0) {
-                    newResult['displayedVariable'] = newResult.variables[0];
+                    newResult.displayedVariable = newResult.variables[0];
                 } else {
-                    newResult['displayedVariable'] = undefined;
+                    newResult.displayedVariable = undefined;
                 }
                 res.view(null, newResult);
             });

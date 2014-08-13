@@ -11,6 +11,9 @@
  * @param {Array|Object|String} errors
  *      optional errors
  */
+/* global sails */
+
+'use strict';
 
 module.exports[500] = function serverErrorOccurred(errors, req, res) {
 

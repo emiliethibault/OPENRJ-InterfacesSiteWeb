@@ -15,6 +15,8 @@
  * @docs        :: http://sailsjs.org/#!documentation/controllers
  */
 
+'use strict';
+
 module.exports = {
     
     contact: function (req, res) {

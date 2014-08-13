@@ -7,6 +7,8 @@
  * Usage: res.notFound()
  */
 
+'use strict';
+
 module.exports[404] = function pageNotFound(req, res) {
 
   /*
