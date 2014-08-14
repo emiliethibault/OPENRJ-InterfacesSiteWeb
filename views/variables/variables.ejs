@@ -324,7 +324,7 @@
     var SITEIDKEY = 'SITEID',
         URLBASE = '/sites/'+ SITEIDKEY +'/series/information.json',
         SERIESURLBASE = '/sites/'+ SITEIDKEY +'/variables/*/series',
-        FROM = moment().subtract(8, 'days').format(),
+        FROM = moment().subtract(7, 'days').format(),
         TO = moment().subtract(1, 'days').format(),
         ajaxRequest = function (seriesURL, callback) {
             
