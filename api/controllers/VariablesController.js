@@ -18,6 +18,7 @@
 'use strict';
 
 var request = require('request'),
+    locationStringifier = require('./SitesController').locationStringifier,
     getSiteInformation = function (url, result, callback) {
         request(url, function (error, response, body) {
             if (!error && response.statusCode === 200) {
@@ -56,6 +57,7 @@ module.exports = {
             pageTitle = 'OpeNRJ - Variables',
             options = {
                 'title': pageTitle,
+                'locationStringifier': locationStringifier,
                 'displayedVariable': {}
             };
         

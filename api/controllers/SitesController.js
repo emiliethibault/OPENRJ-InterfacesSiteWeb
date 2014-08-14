@@ -92,6 +92,18 @@ var request = require('request'),
             });
         });
     },
+    locationStringifier = function (location) {
+        var locationSt = location;
+
+        if (location === '06') {
+            locationSt = 'Alpes-Maritimes (' +location + ')';
+        }
+        else if (location === '64') {
+            locationSt = 'Pyrénées-Atlantiques (' +location + ')';
+        }
+
+        return locationSt;
+    },
     APIURL = 'https://api.openrj.eu/v1/sites';
 
 module.exports = {
@@ -100,13 +112,12 @@ module.exports = {
 
         var pageTitle = 'OpeNRJ - Sites',
             options = {
-                'title': pageTitle
+                'title': pageTitle,
+                'locationStringifier': locationStringifier
             };
 
         getSitesList(APIURL, options, function (result) {
-            //getSeriesInformationPerSite(sitesURL, result, 0, function (result) {
-                res.view(null, result);
-            //});
+            res.view(null, result);
         });
     },
 
@@ -124,6 +135,8 @@ module.exports = {
     getSeriesInformationPerSite: getSeriesInformationPerSite,
     updateSeriesInformation: updateSeriesInformation,
     getSitesList: getSitesList,
+
+    locationStringifier: locationStringifier,
 
 
   /**

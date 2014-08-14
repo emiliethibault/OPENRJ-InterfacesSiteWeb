@@ -61,9 +61,9 @@ var expect = require('expect.js'),
     EXPECTED_START_DATE = VARIABLE_5.startDate,
     EXPECTED_END_DATE = VARIABLE_4.endDate,
     EXPECTED_SERIES_COUNT = VARIABLE_1.count + VARIABLE_2.count + VARIABLE_3.count + VARIABLE_4.count + VARIABLE_5.count,
-    TEST_SITE_SERIES_COUNT = 569,
+    TEST_SITE_SERIES_COUNT = 570,
     TEST_SITE_START_DATE = '11 févr. 2014',
-    TEST_SITE_END_DATE = '8 août 2014',
+    TEST_SITE_END_DATE = '13 août 2014',
     TEST_SITE_VARIABLES_NUMBER = 12;
 
 moment.locale('fr');

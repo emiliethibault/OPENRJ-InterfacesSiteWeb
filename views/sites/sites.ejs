@@ -12,6 +12,10 @@
    .site-label {
         height: 50px;
    }
+
+   .site-location {
+        height: 50px;
+   }
 </style>
 
 <div id="wrapper">
@@ -47,11 +51,8 @@
                             </figure>
                             <div class="item-box-desc">
                                 <h4 class="site-label"><%= site.label %></h4>
-                                <% if (site.location === '06') { %>
-                                    <small>Alpes-Maritimes (06)</small>
-                                <% } else { %>
-                                    <small><%= site.location %></small>
-                                <% } %>
+                                
+                                <small class="site-location"><%= locationStringifier(site.location) %></small>
                                 <p class="site-description">
                                     <%if (site.description.length >= 75) { %>
                                     <%= site.description.substring(0, 74) + ' ...' %>

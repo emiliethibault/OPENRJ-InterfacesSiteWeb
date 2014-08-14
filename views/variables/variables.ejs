@@ -51,11 +51,7 @@
 
                 <!-- agent detail -->
                 <p>
-                    <% if (site.location === '06') { %>
-                        <strong class="styleSecondColor fsize17">Alpes-Maritimes (06)</strong>
-                    <% } else { %>
-                        <strong class="styleSecondColor fsize17"><%= site.location %></strong>
-                    <% } %>
+                    <strong class="styleSecondColor fsize17"><%= locationStringifier(site.location) %></strong>
                 </p>
                 <p class="series-information">
                     <img src="/images/loading.gif" alt="loading" />
@@ -328,7 +324,7 @@
     var SITEIDKEY = 'SITEID',
         URLBASE = '/sites/'+ SITEIDKEY +'/series/information.json',
         SERIESURLBASE = '/sites/'+ SITEIDKEY +'/variables/*/series',
-        FROM = moment().subtract(365, 'days').format(),
+        FROM = moment().subtract(7, 'days').format(),
         TO = moment().format(),
         ajaxRequest = function (seriesURL, callback) {
             
@@ -484,7 +480,7 @@
         });
 
         $('#variables-chart-selector').change(function () {
-            var variableID = $(this).val(),
+            var variableID = $('#variables-chart-selector').val(),
                 rowName = '#div-variables-list .'+variableID+'-informations'
                 variableLabel = $(rowName + ' .'+variableID+'-label').html(),
                 siteID = sites_list[0].className.replace('white-row actual-site-information ', ''),
@@ -501,13 +497,45 @@
             });
         });
         $('#datepickerBeginDate').datepicker({
-            onSelect: function(dateText) {
-                console.log("Selected date: " + dateText + "; input's current value: " + this.value);
+            onSelect: function() {
+                var from = moment($('#datepickerBeginDate').datepicker('getDate')).format(),
+                    to = moment($('#datepickerEndDate').datepicker('getDate')).format(),
+                    variableID = $('#variables-chart-selector').val(),
+                    rowName = '#div-variables-list .'+variableID+'-informations'
+                    variableLabel = $(rowName + ' .'+variableID+'-label').html(),
+                    siteID = sites_list[0].className.replace('white-row actual-site-information ', ''),
+                    siteIDURL = URLBASE.replace(SITEIDKEY, siteID),
+                    siteSeriesURL = SERIESURLBASE.replace(SITEIDKEY, siteID),
+                    seriesFromToURL = siteSeriesURL.replace('*', variableID) + '?from='+ from +'&to='+ to;
+
+                changeVariableFilterInformation(variableID);
+
+                $('#chart').html('<div style="text-align: center;"><img src="/images/loading.gif" alt="loading" /></div>');
+                $('.chart-variable-label').html(variableLabel);
+                ajaxRequest(seriesFromToURL, function (seriesFromTo) {
+                    drawChart(seriesFromTo, from, to);
+                });
             }
         });
         $('#datepickerEndDate').datepicker({
-            onSelect: function(dateText) {
-                console.log("Selected date: " + dateText + "; input's current value: " + this.value);
+            onSelect: function() {
+                var from = moment($('#datepickerBeginDate').datepicker('getDate')).format(),
+                    to = moment($('#datepickerEndDate').datepicker('getDate')).format(),
+                    variableID = $('#variables-chart-selector').val(),
+                    rowName = '#div-variables-list .'+variableID+'-informations'
+                    variableLabel = $(rowName + ' .'+variableID+'-label').html(),
+                    siteID = sites_list[0].className.replace('white-row actual-site-information ', ''),
+                    siteIDURL = URLBASE.replace(SITEIDKEY, siteID),
+                    siteSeriesURL = SERIESURLBASE.replace(SITEIDKEY, siteID),
+                    seriesFromToURL = siteSeriesURL.replace('*', variableID) + '?from='+ from +'&to='+ to;
+
+                changeVariableFilterInformation(variableID);
+
+                $('#chart').html('<div style="text-align: center;"><img src="/images/loading.gif" alt="loading" /></div>');
+                $('.chart-variable-label').html(variableLabel);
+                ajaxRequest(seriesFromToURL, function (seriesFromTo) {
+                    drawChart(seriesFromTo, from, to);
+                });
             }
         });
         
