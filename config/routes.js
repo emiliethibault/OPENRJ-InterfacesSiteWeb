@@ -75,9 +75,33 @@ module.exports.routes = {
     action: 'faq',
   },
 
+  /*
+    API
+  */
+
   '/api': {
     controller: 'JoinUsController',
     action: 'api',
+  },
+
+  '/api/get-sites': {
+    controller: 'ApiController',
+    action: 'getSites',
+  },
+
+  '/api/get-variables': {
+    controller: 'ApiController',
+    action: 'getVariables',
+  },
+
+  '/api/get-variable': {
+    controller: 'ApiController',
+    action: 'getVariable',
+  },
+
+  '/api/get-site-series': {
+    controller: 'ApiController',
+    action: 'getSiteSeries',
   },
 
   /*

@@ -14,64 +14,174 @@
     </header>
 
     <section class="container">
-
-        <!-- WELCOME -->
         <article>
-            <h2>Nos APIs</h2>
-            <p>Deux Apis sont accessibles sur notre site. 
-            <ul>
-            <li>Les Apis pour publier vos données sur nos serveurs</li>
-            <li>Les Apis pour récupérer toutes les données stockées sur la plateforme (données énergie, bâtiment, ...)</li>
-            </ul>
+            <h1>OpeNRJ APIs</h1>
+            <p>
+                Dans cette section, nous décrirons la liste des APIs REST disponibles pour la plate-forme OpeNRJ.
             </p>
-            <p>Les guides pas à pas téléchargeables ci-après vous permettront de comprendre comment utiliser nos APIs.</p>
+            <p>Deux APIs RESTful sont accessibles sur notre site. 
+                <ul>
+                    <li>Les APIs pour publier vos données sur nos serveurs</li>
+                    <li>Les APIs pour récupérer toutes les données stockées sur la plateforme (données énergie, bâtiment, ...)</li>
+                </ul>
+            </p>
+            <p>
+                La documentation ci-après vous permettront de comprendre comment utiliser nos APIs.
+            </p>
         </article>
-        <!-- WELCOME -->
         <div class="divider"><!-- divider -->
-        <i class="fa fa-star"></i>
-    </div>
-    </section>
-
-    <!-- 3COLUMNS-->
-    <section class="container">
-        <div class="row text-center">
-
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <!-- item -->
-                <div class="item-box">
-                    <div class="featured-box nobg">
-                        <a href="#"><i class="fa fa  fa-file-text-o"></i></a>
-                        <div class="item-box-desc">
-                            <h4>APIs entrantes</h4>
-                            <p>Vous souhaitez envoyer vos données sur la plateforme. Suivez les instructions contenues dans le document.</p>
-                            <a href="#"><button type="button" class="btn btn-primary btn-lg">Lire le document</button></a>
-                        </div>
-                    </div>
-                </div>
-                <!-- /item -->
-
-            </div>
-            
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <!-- item -->
-                <div class="item-box">
-                    <div class="featured-box nobg">
-                        <a href="#"><i class="fa fa  fa-file-text"></i></a>
-                        <div class="item-box-desc">
-                            <h4>APIs sortantes</h4>
-                            <p>Vous voulez utiliser les données OPENRJ. Suivez les instructions contenues dans ce document-ci.</p>
-                            <a href="#"><button type="button" class="btn btn-primary btn-lg">Lire le document</button></a>
-                        </div>
-                    </div>
-                </div>
-                <!-- /item -->
-
-            </div>
-
-
+            <i class="fa fa-star"></i>
         </div>
+        <article>
+            <h2>Démarage rapide</h2>
+            <p>
+                Pour un courte introduction au fonctionnement de la plate-forme et les principales requêtes REST à utiliser, veuillez consulter la page de <a class="reference external" href="./api/quickstart">démarrage rapide</a>.
+            </p>
+        </article>
+        <div class="divider"><!-- divider -->
+            <i class="fa fa-star"></i>
+        </div>
+        <article>
+            <h2>Stocker des données</h2>
+            <table class="table table-bordered table-striped">
+                <colgroup>
+                    <col width="10%" />
+                    <col width="50%" />
+                    <col width="40%" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Méthode</th>
+                        <th>Requête</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody valign="top">
+                <tr>
+                    <td>
+                        POST 
+                    </td>
+                    <td>
+                        <a href="./api_post_variables.html">/v1/users/:userID/sites/:siteID/variables</a>
+                    </td>
+                    <td>
+                        Déclaration des variables et des méta-données des variables.
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        POST 
+                    </td>
+                    <td>
+                        <a href="./api_post_series.html">/v1/users/:userID/sites/:siteID/variables/series</a>
+                    </td>
+                    <td>
+                        Création des séries temporelles des Variables d'un site.
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        GET 
+                    </td>
+                    <td>
+                        <a href="./api_get_job.html">/v1/users/:userID/sites/:siteID/jobs/:jobID</a>
+                    </td>
+                    <td>
+                        Vérification de la création des séries temporelles pour un site.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        </article>
+        <div class="divider"><!-- divider -->
+            <i class="fa fa-star"></i>
+        </div>
+        <article>
+            <h2>Récupérer des données</h2>
+            <table class="table table-bordered table-striped">
+                <colgroup>
+                    <col width="10%" />
+                    <col width="50%" />
+                    <col width="40%" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Méthode</th>
+                        <th>Requête</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            GET 
+                        </td>
+                        <td>
+                            <a href="/api/get-sites">/v1/sites</a>
+                        </td>
+                        <td>
+                            Récupération de la liste des sites enregistrés sur la plate-forme OpeNRJ.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            GET 
+                        </td>
+                        <td>
+                            <a href="./api_get_variables_metadata.html">/v1/sites/:siteID</a>
+                        </td>
+                        <td>
+                            Récupération des informations d'un site.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            GET 
+                        </td>
+                        <td>
+                            <a href="/api/get-variables">/v1/sites/:siteID/variables</a>
+                        </td>
+                        <td>
+                            Récupération des variables et de leurs méta-données pour un site.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            GET 
+                        </td>
+                        <td>
+                            <a href="/api/get-variable">/v1/sites/:siteID/variables/:variableID</a>
+                        </td>
+                        <td>
+                            Récupération des méta-données d'une variable d'un site.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            GET 
+                        </td>
+                        <td>
+                            <a href="/api/get-site-series">/v1/sites/:siteID/variables/series</a>
+                        </td>
+                        <td>
+                            Récupération des séries temporelles de toutes les variables d'un site.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            GET 
+                        </td>
+                        <td>
+                            <a href="./api_get_variable_series.html">/v1/sites/:siteID/variables/:variableID/series</a>
+                        </td>
+                        <td>
+                            Récupération des séries temporelles d'une variable d'un site.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </article>
     </section>
-    <!--/3COLUMNS-->
 </div>
 <!-- /WRAPPER -->
 
