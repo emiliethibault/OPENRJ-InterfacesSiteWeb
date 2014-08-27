@@ -1,0 +1,286 @@
+<div id="wrapper">
+
+    <!-- PAGE TITLE -->
+    <header id="page-title">
+        <div class="container">
+            <h1><%= title.replace('OpeNRJ - API - ', '') %></h1>
+
+            <ul class="breadcrumb">
+                <li><a href="/">Accueil</a></li>
+                <li><a href="/api">Documentation - API</a></li>
+                <li class="active"><%= title.replace('OpeNRJ - API - ', '') %></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="container">
+    <h1>Créer des variables pour un site</h1>
+
+    <h2>Présentation</h2>
+        <table class="table table-bordered table-striped">
+            <colgroup>
+                <col width="40%" />
+                <col width="20%" />
+                <col width="10%" />
+                <col width="30%" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Autorisation</th>
+                    <th>Méthode</th>
+                    <th>Requête</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Cette requête permet de créer de nouvelles variables pour un site en envoyant un fichier TSV. Ce fichier doit respecter un format bien précis. Pour l'instant, c'est la seule requête permettant de créer des variables sur la plate-forme.</td>
+                    <td>Requise par Basic HTTP (nom d'utilisateur et mot de passe)</td>
+                    <td>POST</td>
+                    <td>/v1/users/:userID/sites/:siteID/variables</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div>
+            <h3>Paramètre de l'URL</h2>
+            <table class="table table-bordered table-striped">
+                <colgroup>
+                    <col width="25%" />
+                    <col width="25%" />
+                    <col width="50%" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Paramètre</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>:userID</td>
+                        <td>String</td>
+                        <td>Identifiant unique de l'utilisateur. Si vous ne connaissez pas votre identifiant, vous pouvez utiliser le mot clé &quot;current&quot; à la place.</td>
+                    </tr>
+                    <tr>
+                        <td>:siteID</td>
+                        <td>String</td>
+                        <td>Identifiant unique du site.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div>
+            <h3>Paramètre de la requête</h2>
+            <h4>Requis</h4>
+            
+            <table class="table table-bordered table-striped">
+                <colgroup>
+                    <col width="25%" />
+                    <col width="25%" />
+                    <col width="50%" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Paramètre</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>metadata</td>
+                        <td>File</td>
+                        <td>Liste des variables et de leurs méta-données. Ce fichier sera au format TSV détaillé ci-dessous.</td>
+                </tbody>
+            </table>
+
+            <h5>Format</h5>
+            <p>Le fichier de méta-données doit être écrit dans un format compréhensible par le serveur. Il devra donc contenir un entête de déclaration du fichier, le nom des colonnes du fichier et la liste des variables et de leurs méta-données. Le séparateur utilisé est la tabulation (vérifiez bien que vous utilisez des tabulations et pas des espaces). Voici un exemple de fichier bien formaté :</p>
+            <pre>
+            FORMAT_VERSION  1
+            CREATION_DATE   2014-02-13T14:22:07Z
+            ID_SITE test_site
+            FEEDBACK_TO me&#64;worldcompany.com
+
+            varname label   type    value_type  units   lower_bound upper_bound delta_min   delta_max
+            energy_aircond_3    aircond_3   energy  N   kWh
+            energy_aircond_1    aircond_1   energy  N   kWh
+            energy_aircond_2    aircond_2   energy  N   kWh
+            energy_plugs_2  plugs_2 energy  N   kWh
+            energy_plugs_3  plugs_3 energy  N   kWh
+            energy_lights_3 lights_3    energy  N   kWh
+            energy_plugs_1  plugs_1 energy  N   kWh
+            energy_lights_1 lights_1    energy  N   kWh
+            energy_lights_2 lights_2    energy  N   kWh
+            </pre>
+            <p>Dans notre exemple précédent :</p>
+            <table class="table table-bordered table-striped">
+                <colgroup>
+                    <col width="25%" />
+                    <col width="75%" />
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <th>FORMAT_VERSION</th>
+                        <td>Version du format de fichier utilisé. Actuellement, nous utilisons la version 1.</td>
+                    </tr>
+                    <tr>
+                        <th>CREATION_DATE</th>
+                        <td>Date de création du fichier.</td>
+                    </tr>
+                    <tr>
+                        <th>ID_SITE</th>
+                        <td>Identifiant de votre site.</td>
+                    </tr>
+                    <tr>
+                        <th>FEEDBACK_TO</th>
+                        <td>Adresse e-mail de la personne en charge du site qui sera prévenu de la création des données.</td>
+                    </tr>
+                    <tr>
+                        <th>varname</th>
+                        <td>Identifiant unique de la variable.</td>
+                    </tr>
+                    <tr>
+                        <th>label</th>
+                        <td>Label utilisé pour nommé la variable dans un espace de texte par exemple.</td>
+                    </tr>
+                    <tr>
+                        <th>type</th>
+                        <td>Type de la variable (energy, temperature, ...).</td>
+                    </tr>
+                    <tr>
+                        <th>value_type</th>
+                        <td>Type des données reçu (N pour numérique, L pour logique, T pour texte).</td>
+                    </tr>
+                    <tr>
+                        <th>units</th>
+                        <td>Unité de la variable.</td>
+                    </tr>
+                    <tr>
+                        <th>lower_bound</th>
+                        <td>(optionnelle) Limite inférieure inclusive des valeurs admissibles.</td>
+                    </tr>
+                    <tr>
+                        <th>upper_bound</th>
+                        <td>(optionnelle) Limite supérieure inclusive des valeurs admissibles.</td>
+                    </tr>
+                    <tr>
+                        <th>delta_min</th>
+                        <td>(optionnelle) Différentiel minimum inclusif avec la valeur précédente.</td>
+                    </tr>
+                    <tr>
+                        <th>delta_max</th>
+                        <td>(optionnelle) Différentiel maximum inclusif avec la valeur précédente.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Optionnel</h4>
+            <p>Aucun.</p>
+        
+        </div>
+
+        <div>
+            <h2>Message de succès</h2>
+            <h3>Exemple de requête</h3>
+            
+            <pre>
+            curl -i -X POST 'https://api.openrj.eu/v1/users/current/sites/test_site/variables' -u cstb_test:cstb2014 -F metadata=@test_site_metadata.csv
+
+            201 CREATED
+
+            {
+                "message": "Metadata transfered with success."
+            }
+            </pre>
+        </div>
+
+        <div>
+            <h2>Message d'erreur &quot;Bad file format: missing ...&quot;</h2>
+            <h3>Exemple de requête</h3>
+            
+            <pre>
+            curl -i -X POST 'https://api.openrj.eu/v1/users/current/sites/test_site/variables' -u cstb_test:cstb2014 -F metadata=@invalid_metadata.tsv
+
+            400 BAD REQUEST
+
+            {
+                "error": "Missing FORMAT_VERSION in line 1"
+            }
+            </pre>
+            <h3>Causes</h3>
+            <p>Le fichier envoyé est mal formaté. Il manque un élément. Veuillez vous référer au message d'erreur et à la description du format pour corriger votre fichier et le renvoyer.</p>
+        </div>
+
+        <div>
+            <h2>Message d'erreur &quot;Missing metadata file&quot;</h2>
+            <h3>Exemple de requête</h3>
+            
+            <pre>
+            curl -i -X POST 'https://api.openrj.eu/v1/users/current/sites/test_site/variables' -u cstb_test:cstb2014
+
+            400 BAD REQUEST
+
+            {
+                "error": "Missing metadata file."
+            }
+            </pre>
+            <h3>Causes</h3>
+            <p>Vous avez oublié de joindre le fichier de méta-données à la requête REST. Vérifiez bien que vous l'envoyez en tant que fichier joint à la requête et pas en tant que &quot;query string&quot; ou dans le &quot;body&quot; de la requête.</p>
+        </div>
+        <div>
+            <h2>Message d'erreur &quot;Missing authorization headers&quot;</h2>
+            <h3>Exemple de requête</h3>
+            
+            <pre>
+            curl -i -X POST 'https://api.openrj.eu/v1/users/current/sites/test_site/variables'
+
+            400 BAD REQUEST
+
+            {
+                "error": "Missing authorization headers"
+            }
+            </pre>
+            <h3>Causes</h3>
+            <p>Vous avez oublié les paramètres &quot;username&quot; et &quot;password&quot; nécessaire à l'authentification dans votre requête.</p>
+        </div>
+        <div>
+            <h2>Message d'erreur &quot;Unauthorized&quot;</h2>
+            <h3>Exemple de requête</h3>
+            
+            <pre>
+            curl -i -X POST 'https://api.openrj.eu/v1/users/current/sites/test_site/variables' -u rtyui:ertyui
+
+            401 Unauthorized
+
+            {
+                "error": "Unauthorized"
+            }
+            </pre>
+            <h3>Causes</h3>
+            <p>Vous vous êtes trompé d'identifiant ou vous n'avez pas accès à cette information.</p>
+        </div>
+
+        <div>
+            <h2>Message d'erreur &quot;Site not found&quot;</h2>
+            <h3>Exemple de requête</h3>
+            
+            <pre>
+            curl -i -X POST 'https://api.openrj.eu/v1/users/current/sites/test_sit/variables' -u rtyui:ertyui
+
+            404 Not Found
+
+            {
+                "error":"Site not found."
+            }
+            </pre>
+            <h3>Causes</h3>
+            <p>Ce site n'existe pas.</p>
+        </div>
+    </section>
+</div>
+
+<script type="text/javascript" src="/plugins/jquery-2.0.3.min.js"></script>

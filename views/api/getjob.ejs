@@ -1,0 +1,217 @@
+<<div id="wrapper">
+
+    <!-- PAGE TITLE -->
+    <header id="page-title">
+        <div class="container">
+            <h1><%= title.replace('OpeNRJ - API - ', '') %></h1>
+
+            <ul class="breadcrumb">
+                <li><a href="/">Accueil</a></li>
+                <li><a href="/api">Documentation - API</a></li>
+                <li class="active"><%= title.replace('OpeNRJ - API - ', '') %></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="container">
+    <h1>Récupérer l'état du job de traitement des séries temporelles</h1>
+
+    <h2>Présentation</h2>
+        <table class="table table-bordered table-striped">
+            <colgroup>
+                <col width="40%" />
+                <col width="20%" />
+                <col width="10%" />
+                <col width="30%" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Autorisation</th>
+                    <th>Méthode</th>
+                    <th>Requête</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Cette requête permet de récupérer l'état du job de traitement des séries temporelles afin d'informer l'émetteur des données si le traitement est terminé, s'il s'est bien passé où s'il y a une erreur dans le formatage de son archive.</td>
+                    <td>Requise par Basic HTTP (nom d'utilisateur et mot de passe)</td>
+                    <td>GET</td>
+                    <td>/v1/users/:userID/sites/:siteID/jobs/:jobID</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div>
+            <h3>Paramètre de l'URL</h2>
+            <table class="table table-bordered table-striped">
+                <colgroup>
+                    <col width="25%" />
+                    <col width="25%" />
+                    <col width="50%" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Paramètre</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>:userID</td>
+                        <td>String</td>
+                        <td>Identifiant unique de l'utilisateur. Si vous ne connaissez pas votre identifiant, vous pouvez utiliser le mot clé &quot;current&quot; à la place.</td>
+                    </tr>
+                    <tr>
+                        <td>:siteID</td>
+                        <td>String</td>
+                        <td>Identifiant unique du site.</td>
+                    </tr>
+                    <tr>
+                        <td>:jobID</td>
+                        <td>String</td>
+                        <td>Identifiant unique du job.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div>
+            <h3>Paramètre de la requête</h2>
+            <h4>Requis</h4>
+            <p>Aucun.</p>
+            <h4>Optionnel</h4>
+            <p>Aucun.</p>
+        </div>
+
+        <div>
+            <h2>Message de succès</h2>
+            <h3>Exemple de requête</h3>
+            
+            <pre>
+            curl -i -X GET 'https://api.openrj.eu/v1/users/current/sites/test_site/jobs/1' -u cstb_test:cstb2014
+
+            200 OK
+
+            {
+                "siteID": "test_site",
+                "jobID": "1",
+                "status": "Completed.",
+                "code": 201
+            }
+            </pre>
+            <h3>Détails</h3>
+            <table class="table table-bordered table-striped">
+                <colgroup>
+                    <col width="25%" />
+                    <col width="25%" />
+                    <col width="50%" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Paramètre</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>siteID</td>
+                        <td>String</td>
+                        <td>Identifiant unique du site.</td>
+                    </tr>
+                    <tr>
+                        <td>jobID</td>
+                        <td>String</td>
+                        <td>Identifiant unique du job.</td>
+                    </tr>
+                    <tr>
+                        <td>status & code</td>
+                        <td>String, Integer</td>
+                        <td>État du job. La valeur peut-être soit :
+                            <ul class="last simple">
+                                <li>&quot;Ongoing&quot;: code 100,</li>
+                                <li>&quot;Completed&quot;: code 201,</li>
+                                <li>&quot;Bad file format&quot;:  code 400,</li>
+                                <li>&quot;Missing variable name&quot;:  code 400,</li>
+                                <li>&quot;Unknown variable name&quot;: code 404,</li>
+                                <li>&quot;Database connection problem&quot;: code 500,</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div>
+            <h2>Message d'erreur &quot;Missing authorization headers&quot;</h2>
+            <h3>Exemple de requête</h3>
+            
+            <pre>
+            curl -i -X GET 'https://api.openrj.eu/v1/users/current/sites/test_site/jobs/1'
+
+            400 BAD REQUEST
+
+            {
+                "error": "Missing authorization headers"
+            }
+            </pre>
+            <h3>Causes</h3>
+            <p>Vous avez oublié les paramètres &quot;username&quot; et &quot;password&quot; nécessaire à l'authentification dans votre requête.</p>
+        </div>
+
+        <div>
+            <h2>Message d'erreur &quot;Unauthorized&quot;</h2>
+            <h3>Exemple de requête</h3>
+            
+            <pre>
+            curl -i -X GET 'https://api.openrj.eu/v1/users/current/sites/test_site/jobs/1' -u rtyui:ertyui
+
+            401 Unauthorized
+
+            {
+                "error": "Unauthorized"
+            }
+            </pre>
+            <h3>Causes</h3>
+            <p>Vous vous êtes trompé d'identifiant ou vous n'avez pas accès à cette information.</p>
+        </div>
+
+        <div>
+            <h2>Message d'erreur &quot;Site not found&quot;</h2>
+            <h3>Exemple de requête</h3>
+            
+            <pre>
+            curl -i -X GET 'https://api.openrj.eu/v1/users/current/sites/test_site2/jobs/1' -u rtyui:ertyui
+
+            404 Not Found
+
+            {
+                "error":"Site not found."
+            }
+            </pre>
+            <h3>Causes</h3>
+            <p>Ce site n'existe pas.</p>
+        </div>
+
+        <div>
+            <h2>Message d'erreur &quot;Job not found&quot;</h2>
+            <h3>Exemple de requête</h3>
+            
+            <pre>
+            curl -i -X GET 'https://api.openrj.eu/v1/users/current/sites/test_site/jobs/a' -u cstb_test:cstb2014
+
+            404 Not Found
+
+            {
+                "error":"Job not found."
+            }
+            </pre>
+            <h3>Causes</h3>
+            <p>Ce job n'existe pas.</p>
+        </div>
+    </section>
+</div>
+
+<script type="text/javascript" src="/plugins/jquery-2.0.3.min.js"></script>

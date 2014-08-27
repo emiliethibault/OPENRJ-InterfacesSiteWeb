@@ -19,9 +19,39 @@
 
 module.exports = {
     
+    quickstart: function (req, res) {
+        res.view(null, {
+            title: 'OpeNRJ - API - Démarage rapide'
+        });
+    },
+
+    postVariables: function (req, res) {
+        res.view(null, {
+            title: 'OpeNRJ - API - POST variables'
+        });
+    },
+
+    postSiteSeries: function (req, res) {
+        res.view(null, {
+            title: 'OpeNRJ - API - POST series pour un site'
+        });
+    },
+
+    getJob: function (req, res) {
+        res.view(null, {
+            title: 'OpeNRJ - API - GET job'
+        });
+    },
+
     getSites: function (req, res) {
         res.view(null, {
             title: 'OpeNRJ - API - GET liste des sites'
+        });
+    },
+
+    getSite: function (req, res) {
+        res.view(null, {
+            title: 'OpeNRJ - API - GET information d\'un site'
         });
     },
 
@@ -40,6 +70,12 @@ module.exports = {
     getSiteSeries: function (req, res) {
         res.view(null, {
             title: 'OpeNRJ - API - GET series d\'un site'
+        });
+    },
+
+    getVariableSeries: function (req, res) {
+        res.view(null, {
+            title: 'OpeNRJ - API - GET series d\'une variable'
         });
     },
 

@@ -1,0 +1,289 @@
+<div id="wrapper">
+
+    <!-- PAGE TITLE -->
+    <header id="page-title">
+        <div class="container">
+            <h1><%= title.replace('OpeNRJ - API - ', '') %></h1>
+
+            <ul class="breadcrumb">
+                <li><a href="/">Accueil</a></li>
+                <li><a href="/api">Documentation - API</a></li>
+                <li class="active"><%= title.replace('OpeNRJ - API - ', '') %></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="container">
+    <h1>Récupérer les séries temporelles d'une variable d'un site</h1>
+
+    <h2>Présentation</h2>
+        <table class="table table-bordered table-striped">
+            <colgroup>
+                <col width="40%" />
+                <col width="20%" />
+                <col width="10%" />
+                <col width="30%" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Autorisation</th>
+                    <th>Méthode</th>
+                    <th>Requête</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Cette requête permet de récupérer la série temporelle d'une variable d'un site pendant une période de temps sélectionnée. Sans période de temps sélectionnée, cette requête ne renvoie que la dernière valeur stockée en base.</td>
+                    <td>Public</td>
+                    <td>GET</td>
+                    <td>/v1/sites/:siteID/variables/:variableID/series</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div>
+            <h3>Paramètre de l'URL</h2>
+            <table class="table table-bordered table-striped">
+                <colgroup>
+                    <col width="25%" />
+                    <col width="25%" />
+                    <col width="50%" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Paramètre</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>:siteID</td>
+                        <td>String</td>
+                        <td>Identifiant unique du site.</td>
+                    </tr>
+                    <tr>
+                        <td>:variableID</td>
+                        <td>String</td>
+                        <td>Identifiant unique de la variable.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div>
+            <h3>Paramètre de la requête</h2>
+            <h4>Requis</h4>
+            <p>Aucun.</p>
+            <h4>Optionnel</h4>
+            <table class="table table-bordered table-striped">
+                <colgroup>
+                    <col width="25%" />
+                    <col width="25%" />
+                    <col width="50%" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Paramètre</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>from</td>
+                        <td>Date</td>
+                        <td>Date de début de la période de temps désirée. Format: YYYY-MM-DDTHH:mm:ssZ, exemple : 2014-05-01T22:00:00Z</td>
+                    </tr>
+                    <tr>
+                        <td>to</td>
+                        <td>Date</td>
+                        <td>Date de fin de la période de temps désirée. Format: YYYY-MM-DDTHH:mm:ssZ, exemple : 2014-05-01T22:00:00Z</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <div>
+            <h2>Message de succès</h2>
+            <h3>Exemple de requête</h3>
+            
+            <pre>
+            curl -i -X GET 'https://api.openrj.eu/v1/sites/test_site/variables/energy_aircond_1/series?from=2014-02-11T22:00:00Z&to=2014-02-12T22:00:00Z'
+
+            HTTP/1.1 200 OK
+
+            {
+              "statusCode": 200,
+              "result": [
+                {
+                  "count": 8,
+                  "startDate": "2014-02-11T22:04:43.000Z",
+                  "endDate": "2014-02-11T23:49:36.000Z",
+                  "variableID": "53bc1a1faa0f163d46c2491d",
+                  "series": [
+                    {
+                      "timestamp": "2014-02-11T22:04:43",
+                      "isodate": "2014-02-11T22:04:43.000Z",
+                      "value": "7418"
+                    },
+                    {
+                      "timestamp": "2014-02-11T22:19:42",
+                      "isodate": "2014-02-11T22:19:42.000Z",
+                      "value": "7418"
+                    },
+                    {
+                      "timestamp": "2014-02-11T22:34:41",
+                      "isodate": "2014-02-11T22:34:41.000Z",
+                      "value": "7418"
+                    },
+                    {
+                      "timestamp": "2014-02-11T22:49:40",
+                      "isodate": "2014-02-11T22:49:40.000Z",
+                      "value": "7418"
+                    },
+                    {
+                      "timestamp": "2014-02-11T23:04:39",
+                      "isodate": "2014-02-11T23:04:39.000Z",
+                      "value": "7419"
+                    },
+                    {
+                      "timestamp": "2014-02-11T23:19:38",
+                      "isodate": "2014-02-11T23:19:38.000Z",
+                      "value": "7419"
+                    },
+                    {
+                      "timestamp": "2014-02-11T23:34:37",
+                      "isodate": "2014-02-11T23:34:37.000Z",
+                      "value": "7419"
+                    },
+                    {
+                      "timestamp": "2014-02-11T23:49:36",
+                      "isodate": "2014-02-11T23:49:36.000Z",
+                      "value": "7419"
+                    }
+                  ]
+                }
+              ]
+            }
+            </pre>
+            <h3>Détails</h3>
+            <table class="table table-bordered table-striped">
+                <colgroup>
+                    <col width="25%" />
+                    <col width="25%" />
+                    <col width="50%" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Paramètre</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>result</td>
+                        <td>Array</td>
+                        <td>Liste des series de la variable.</td>
+                    </tr>
+                    <tr>
+                        <td>result[i].variableID</td>
+                        <td>String</td>
+                        <td>Identifiant de la variable.</td>
+                    </tr>
+                    <tr>
+                        <td>variables[i].count</td>
+                        <td>Number</td>
+                        <td>Nombre de series retournées.</td>
+                    </tr>
+                    <tr>
+                        <td>variables[i].startDate</td>
+                        <td>Date</td>
+                        <td>Date de début de collecte de la variable.</td>
+                    </tr>
+                    <tr>
+                        <td>variables[i].endDate</td>
+                        <td>Date</td>
+                        <td>Date de fin de collecte de la variable.</td>
+                    </tr>
+                    <tr>
+                        <td>variables[i].series</td>
+                        <td>Array</td>
+                        <td>Liste des series retournées par la requête.</td>
+                    </tr>
+                    <tr>
+                        <td>variables[i].series[i].timestamp</td>
+                        <td>String</td>
+                        <td>Date sans timezone au format YYYY-MM-DDTHH:mm:ss.</td>
+                    </tr>
+                    <tr>
+                        <td>variables[i].series[i].isodate</td>
+                        <td>String</td>
+                        <td>Date avec timezone au format YYYY-MM-DDTHH:mm:ss.SSSZ.</td>
+                    </tr>
+                    <tr>
+                        <td>variables[i].series[i].value</td>
+                        <td>Number or String</td>
+                        <td>Valeur de la series à ce timestamp</td>
+                    </tr>
+                <tbody>
+            </table>
+        </div>
+        <div>
+            <h2>Message d'erreur &quot;Site not found&quot;</h2>
+            <h3>Exemple de requête</h3>
+            
+            <pre>
+            curl -i -X GET 'https://api.openrj.eu/v1/sites/test_site2/variables/energy_aircond_1/series?from=2014-02-11T22:00:00Z&to=2014-02-12T22:00:00Z'
+
+            HTTP/1.1 404 Not Found
+
+            {
+              "error": "Site not found."
+            }
+            </pre>
+            <h3>Causes</h3>
+            <p>Ce site n'existe pas.</p>
+        </div>
+        <div>
+            <h2>Message d'erreur &quot;Variable not found&quot;</h2>
+            <h3>Exemple de requête</h3>
+            
+            <pre>
+            curl -i -X GET 'https://api.openrj.eu/v1/sites/test_site/variables/energy_aircond_12/series?from=2014-02-11T22:00:00Z&to=2014-02-12T22:00:00Z'
+
+            HTTP/1.1 404 Not Found
+
+            {
+              "error": "Variable not found."
+            }
+            </pre>
+            <h3>Causes</h3>
+            <p>Cette variable n'existe pas.</p>
+        </div>
+        <div>
+            <h2>Message d'erreur &quot;'from' must be earlier than 'to'&quot;</h2>
+            <h3>Exemple de requête</h3>
+            
+            <pre>
+            curl -i -X GET 'https://api.openrj.eu/v1/sites/test_site/variables/energy_aircond_1/series?from=2015-02-11T22:00:00Z&to=2014-02-12T22:00:00Z'
+
+            HTTP/1.1 200 OK
+
+            {
+              "statusCode": 400,
+              "result": {
+                "error": "\"from\" must be earlier than \"to\""
+              }
+            }
+            </pre>
+            <h3>Causes</h3>
+            <p>La date indiquée dans le paramètre &quot;from&quot; doit être inférieure à la date indiquée paramètre &quot;to&quot;.</p>
+        </div>
+    <section>
+</div>
+
+<script type="text/javascript" src="/plugins/jquery-2.0.3.min.js"></script>

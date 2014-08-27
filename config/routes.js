@@ -84,9 +84,34 @@ module.exports.routes = {
     action: 'api',
   },
 
+  '/api/quickstart': {
+    controller: 'ApiController',
+    action: 'quickstart',
+  },
+
+  '/api/post-variables': {
+    controller: 'ApiController',
+    action: 'postVariables',
+  },
+
+  '/api/post-site-series': {
+    controller: 'ApiController',
+    action: 'postSiteSeries',
+  },
+
+  '/api/get-job': {
+    controller: 'ApiController',
+    action: 'getJob',
+  },
+
   '/api/get-sites': {
     controller: 'ApiController',
     action: 'getSites',
+  },
+
+  '/api/get-site': {
+    controller: 'ApiController',
+    action: 'getSite',
   },
 
   '/api/get-variables': {
@@ -102,6 +127,11 @@ module.exports.routes = {
   '/api/get-site-series': {
     controller: 'ApiController',
     action: 'getSiteSeries',
+  },
+
+  '/api/get-variable-series': {
+    controller: 'ApiController',
+    action: 'getVariableSeries',
   },
 
   /*
