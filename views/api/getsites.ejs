@@ -1,0 +1,184 @@
+<div id="wrapper">
+
+    <!-- PAGE TITLE -->
+    <header id="page-title">
+        <div class="container">
+            <h1><%= title.replace('OpeNRJ - API - ', '') %></h1>
+
+            <ul class="breadcrumb">
+                <li><a href="/">Accueil</a></li>
+                <li><a href="/api">Documentation - API</a></li>
+                <li class="active"><%= title.replace('OpeNRJ - API - ', '') %></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="container">
+        <h1>Récupération de la liste des sites enregistrés sur la plate-forme</h1>
+
+        <h2>Présentation</h2>
+        <table class="table table-bordered table-striped">
+            <colgroup>
+                <col width="40%" />
+                <col width="20%" />
+                <col width="10%" />
+                <col width="30%" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Autorisation</th>
+                    <th>Méthode</th>
+                    <th>Requête</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Cette requête permet de récupérer la liste des sites enregistrés sur la plate-forme OpeNRJ.</td>
+                    <td>Public</td>
+                    <td>GET</td>
+                    <td>/v1/sites</td>
+                </tr>
+            </tbody>
+        </table>
+       
+        <div>
+            <h3>Paramètre de l'URL</h2>
+            <p>Aucun.</p>
+        </div>
+        
+        <div>
+            <h3>Paramètre de la requête</h2>
+            <h4>Requis</h4>
+            <p>Aucun.</p>
+            <h4>Optionnel</h4>
+            <p>Aucun.</p>
+        </div>
+
+        <div>
+            <h2>Message de succès</h2>
+            <h3>Exemple de requête</h3>
+            
+            <pre>
+            $ curl -i -X GET 'https://api.openrj.eu/v1/sites'
+            
+            HTTP/1.1 200 OK
+            
+            {
+              "sites": [
+                {
+                  "id": "53bc1a1a221605195186735a",
+                  "extID": "CCI_NICE",
+                  "label": "La CCI de Nice",
+                  "photo": "/images/community/cci.jpg",
+                  "description": "Acteur de la vie économique du département, la CCI Nice Côte d’Azur a proposé de mesurer les données de consommation du siège de ses activités : la Villa Boutau au boulevard Carabacel à Nice.",
+                  "location": "06"
+                },
+                {
+                  "id": "53bc1a1a2216051951867357",
+                  "extID": "test_site",
+                  "label": "Site de test",
+                  "photo": "/images/community/business-pole.jpg",
+                  "description": "Ce site est un site de test et sera bientôt supprimé.",
+                  "location": "64"
+                },
+                {
+                  "id": "53bc1a1a2216051951867358",
+                  "extID": "CSTB_SOPHIA",
+                  "label": "Le CSTB à Sophia",
+                  "photo": "/images/community/cstb.jpg",
+                  "description": "Partenaire du projet, le CSTB, organisme de recherche situé à Sophia Antipolis, met à disposition sur la plateforme ses données de consommations.",
+                  "location": "06"
+                },
+                {
+                  "id": "53e3a83b59b4e2d9f98d9b77",
+                  "extID": "AXUN_SOPHIA",
+                  "label": "AXUN à Sophia",
+                  "photo": "/images/community/axun.jpg",
+                  "description": "Axun est une entreprise spécialisée dans le photovoltaïque. Elle possède une activité de négoce de kits photovoltaïques, complétée par la distribution de nouveaux produits : pompes à chaleur, caméras thermiques et portes soufflantes. Sa deuxième activité est tournée vers la production d’onduleurs, qui permettent de convertir le courant continu des panneaux photovoltaïques en courant alternatif exportable sur le réseau EDF.",
+                  "location": "06"
+                },
+                {
+                  "id": "53bc1a1a221605195186735b",
+                  "extID": "MAIRIE_BIOT",
+                  "label": "La mairie de Biot",
+                  "photo": "/images/community/biot.jpg",
+                  "description": "La Mairie Annexe de Biot est située dans l’espace commercial Saint-Philippe de la ville.",
+                  "location": "06"
+                },
+                {
+                  "id": "53bc1a1a221605195186735c",
+                  "extID": "MEDIATHEQUE_ANTIBES",
+                  "label": "Médiathèque d'Antibes",
+                  "photo": "/images/community/mediatheque.jpg",
+                  "description": "La Médiathèque communautaire d'Antibes, bâtiment de 4 750 m², est le pôle central du réseau des médiathèques de la Communauté d'Agglomération Sophia Antipolis. En novembre 2010, elle a été renommée Médiathèque Albert Camus.",
+                  "location": "06"
+                },
+                {
+                  "id": "53bc1a1a2216051951867359",
+                  "extID": "UNS_NICE",
+                  "label": "Université de Nice",
+                  "photo": "/images/community/univ.jpg",
+                  "description": "L'Université de Nice Sophia-Antipolis a souhaité s'investir dans le projet en mettant à disposition les données de consommation de plusieurs bâtiments : sur les campus de Valrose et de St Jean D'Angély à Nice.",
+                  "location": "06"
+                }
+              ]
+            }
+            </pre>
+            <h3>Détails</h3>
+            <table class="table table-bordered table-striped">
+                <colgroup>
+                    <col width="25%" />
+                    <col width="25%" />
+                    <col width="50%" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Paramètre</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>sites</td>
+                        <td>Array</td>
+                        <td>Liste des sites de la plate-forme OpeNRJ.</td>
+                    </tr>
+                    <tr>
+                        <td>sites[i].id</td>
+                        <td>String</td>
+                        <td>Identifiant du site.</td>
+                    </tr>
+                    <tr>
+                        <td>sites[i].extID</td>
+                        <td>String</td>
+                        <td>Identifiant du site.</td>
+                    </tr>
+                    <tr>
+                        <td>sites[i].label</td>
+                        <td>String</td>
+                        <td>Nom du site.</td>
+                    </tr>
+                    <tr>
+                        <td>sites[i].photo</td>
+                        <td>String</td>
+                        <td>Photo du site.</td>
+                    </tr>
+                    <tr>
+                        <td>sites[i].description</td>
+                        <td>String</td>
+                        <td>Description du site.</td>
+                    </tr>
+                    <tr>
+                        <td>sites[i].location</td>
+                        <td>String</td>
+                        <td>Localisation du site.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+
+<script type="text/javascript" src="/plugins/jquery-2.0.3.min.js"></script>

@@ -75,23 +75,87 @@ module.exports.routes = {
     action: 'faq',
   },
 
+  /*
+    API
+  */
+
   '/api': {
     controller: 'JoinUsController',
     action: 'api',
+  },
+
+  '/api/quickstart': {
+    controller: 'ApiController',
+    action: 'quickstart',
+  },
+
+  '/api/post-variables': {
+    controller: 'ApiController',
+    action: 'postVariables',
+  },
+
+  '/api/post-site-series': {
+    controller: 'ApiController',
+    action: 'postSiteSeries',
+  },
+
+  '/api/get-job': {
+    controller: 'ApiController',
+    action: 'getJob',
+  },
+
+  '/api/get-sites': {
+    controller: 'ApiController',
+    action: 'getSites',
+  },
+
+  '/api/get-site': {
+    controller: 'ApiController',
+    action: 'getSite',
+  },
+
+  '/api/get-variables': {
+    controller: 'ApiController',
+    action: 'getVariables',
+  },
+
+  '/api/get-variable': {
+    controller: 'ApiController',
+    action: 'getVariable',
+  },
+
+  '/api/get-site-series': {
+    controller: 'ApiController',
+    action: 'getSiteSeries',
+  },
+
+  '/api/get-variable-series': {
+    controller: 'ApiController',
+    action: 'getVariableSeries',
   },
 
   /*
     Data
   */
 
-  '/data-search': {
+  '/sites': {
     controller: 'SitesController',
     action: 'sites'
   },
 
-  '/data-search/:siteID/variables': {
+  '/sites/:siteID/series/information.json': {
+    controller: 'SitesController',
+    action: 'seriesInformation'
+  },
+
+  '/sites/:siteID/variables': {
     controller: 'VariablesController',
     action: 'variables'
+  },
+
+  '/sites/:siteID/variables/:variableID/series': {
+    controller: 'VariablesController',
+    action: 'series'
   },
 
   /*

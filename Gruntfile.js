@@ -14,6 +14,8 @@
  * http://gruntjs.com/configuring-tasks
  */
 
+'use strict';
+
 module.exports = function (grunt) {
 
 
@@ -133,6 +135,16 @@ module.exports = function (grunt) {
   grunt.loadTasks(depsPath + '/grunt-contrib-cssmin/tasks');
   grunt.loadTasks(depsPath + '/grunt-contrib-less/tasks');
   grunt.loadTasks(depsPath + '/grunt-contrib-coffee/tasks');
+  
+/*******************************************************************************
+    Added
+*/    
+  grunt.loadNpmTasks('grunt-contrib-csslint');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-mocha-test');
+/*
+*******************************************************************************/
+
 
   // Project configuration.
   grunt.initConfig({
@@ -399,7 +411,10 @@ module.exports = function (grunt) {
       api: {
 
         // API files to watch:
-        files: ['api/**/*']
+        files: ['api/**/*'],
+
+        // When assets are changed:
+        tasks: ['lint']
       },
       assets: {
 
@@ -407,11 +422,66 @@ module.exports = function (grunt) {
         files: ['assets/**/*'],
 
         // When assets are changed:
-        tasks: ['compileAssets', 'linkAssets']
+        tasks: ['compileAssets', 'linkAssets', 'lint']
+      },
+      all: {
+        files: ['<%= jshint.all %>'],
+        tasks: ['lint', 'mochaTest']
+      }
+    },
+/*******************************************************************************  
+  Added
+*******************************************************************************/
+    project: {
+      main: '<%= pkg.main %>',
+      src: 'api/**/**/*.js',
+      config: 'config/**/*.js',
+      publicJS: 'assets/custom/js/*.js',
+      publicCSS: 'assets/custom/styles/*.css',
+      views: 'views/*',
+      test: 'test/**/**/*.js'
+    },
+    csslint: {
+      strict: {
+        options: {
+          import: 2
+        },
+        src: ['<%= project.publicCSS %>']
+      }
+    },
+    jshint: {
+      options: {
+        jshintrc: '.jshintrc'
+      },
+      all: [
+        'Gruntfile.js',
+        '<%= project.src %>',
+        '<%= project.publicJS %>',
+        '<%= project.test %>',
+        '<%= project.config %>'
+      ]
+    },
+    mochaTest: {
+      test: {
+        options: {
+          timeout: 2000,
+          reporter: 'spec'
+        },
+        // src: ['<%= project.test %>']
+        src: ['test/spec/*.js']
+        // src: ['test/spec/test_end_2_end.js']
+        // src: ['test/spec/test_get_sites.js']
       }
     }
   });
 
+  grunt.registerTask('lint', [
+    'jshint',
+    'csslint'
+  ]);
+/*******************************************************************************
+    End added
+*******************************************************************************/
   // When Sails is lifted:
   grunt.registerTask('default', [
     'compileAssets',

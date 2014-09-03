@@ -1,0 +1,225 @@
+<<div id="wrapper">
+
+    <!-- PAGE TITLE -->
+    <header id="page-title">
+        <div class="container">
+            <h1><%= title.replace('OpeNRJ - API - ', '') %></h1>
+
+            <ul class="breadcrumb">
+                <li><a href="/">Accueil</a></li>
+                <li><a href="/api">Documentation - API</a></li>
+                <li class="active"><%= title.replace('OpeNRJ - API - ', '') %></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="container">
+        <h1>Démarrage rapide</h1>
+
+        <p>Cette section décrit comment stocker simplement des données sur la plate-forme OpeNRJ.</p>
+        <div class="section" id="introduction">
+            <h1>Introduction</h1>
+            <p>La plate-forme OpeNRJ est une plate-forme de stockage de données énergétiques. Elle propose une API Open Data pour les collectivités désirant partager librement leurs données. Toutes les données énergétique reçues sont stocker sous forme de séries temporelles. Ces données énergétiques peuvent émaner de diverses sources (compteurs d'électricité, d'eau ou de gaz, capteurs de température ou de C02, détecteur d'ouverture de porte ou fenêtre, ...).</p>
+            <p>Pour éviter toutes incompréhension, cette plate-forme utilise certains concepts et une certaine nomenclature.</p>
+            <div class="section" id="les-variables">
+                <h2>Les variables</h2>
+                <p>En effet, nous avons désiré éviter de créer une plate-forme centrée sur les capteurs mais plutôt sur les séries temporelles de données. Donc, au lieu d'utiliser le mot &quot;capteur&quot; pour catégoriser une série temporelle, nous utiliserons le mot &quot;variable&quot;. Ainsi, un même capteur pourra au cours du temps générer plusieurs &quot;variables&quot; (exemple d'un capteur de température qui pourra se déplacer au cours de sa vie).</p>
+                <p>Plus clairement, détaillons ensemble un cas d'usage. Disons que vous utilisez un capteur d'énergie de type prise (prise murale que l'on branche dans une prise électrique et permet d'y brancher d'autres appareils électriques et de récupérer leurs consommations électriques). Si vous branchez ce capteur dans le bureau A et que vous branchez une lampe dessus, vous pourrez appeler cette variable &quot;lampe_bureau_A&quot;. Vous créerez donc une série temporelle de données énergétiques dédiée à la lampe du bureau A. Si vous désirez utiliser cette prise pour analyser la consommation de l'écran d'ordinateur situé dans le bureau B, vous débrancherez la prise du bureau A, la brancherez dans le bureau B, créerez une variable s'appelant &quot;ecran_bureau_B&quot; et vous pourrez créer une série temporelle dédiée à l'écran d'ordinateur du bureau B sans avoir de conflit avec la première série temporelle. De plus, cela simplifie grandement le traitement informatique en cas de panne et/ou de remplacement du capteur.</p>
+            </div>
+            <div class="section" id="les-sites">
+                <h2>Les sites</h2>
+                <p>Nous utilisons aussi la notion de &quot;site&quot;. Un site peut être indifféremment une université contenant plusieurs bâtiment, un établissement publique, une maison, un appartement, ...
+                Chaque &quot;site&quot; peut contenir plusieurs &quot;variables&quot; et chaque &quot;variable&quot; peut commencer ou finir sa série temporelle à n'importe quel moment. Dans notre exemple, Vous serez le gestionnaire d'un site et vous pourrez déclarer autant de &quot;variable&quot; (point de mesure) que vous le désirez.</p>
+                <p>Cette introduction étant terminée, nous allons maintenant décrire comment créer un site, créer des variables, stocker des séries temporelles pour ces variables et lire ces séries temporelles.</p>
+            </div>
+        </div>
+        <div class="section" id="etape-1-creation-du-site-et-des-identifiants-de-l-utilisateur">
+            <h1>Étape 1 - Création du Site et des identifiants de l'utilisateur</h1>
+            <p>Pour l'instant, cette étape est réservée à l'administrateur de la plate-forme. Ces identifiants vous serons communiqués par e-mail. Dans la version finale d'OpeNRJ, chaque gestionnaires de site pourra s'enregistrer lui-même sur la plate-forme via une interface Web.</p>
+        </div>
+        <div class="section" id="etape-2-creation-des-variables-du-site">
+            <h1>Étape 2 - Création des Variables du Site</h1>
+            <p>Pour créer les variables de notre site, nous allons d'abord déclarer nos variables dans un ficher CSV et ensuite nous enverrons ce fichier via une requêtes REST.</p>
+            <div class="section" id="format-des-meta-donnees">
+                <h2>Format des méta-données</h2>
+                <p>Le fichier de méta-données doit être écrit dans un format compréhensible par le serveur. Il devra donc contenir un entête de déclaration du fichier, le nom des colonnes du fichier et la liste des variables et de leurs méta-données. Le séparateur utilisé est la tabulation (vérifiez bien que vous utilisez des tabulations et pas des espaces). Voici un exemple de fichier bien formaté :</p>
+                <pre class="literal-block">
+                FORMAT_VERSION  1
+                CREATION_DATE   2014-02-13T14:22:07Z
+                ID_SITE test_site
+                FEEDBACK_TO     me&#64;worldcompany.com
+
+                varname label   type    value_type      units   lower_bound     upper_bound     delta_min       delta_max
+                energy_aircond_3        aircond_3       energy  N       kWh
+                energy_aircond_1        aircond_1       energy  N       kWh
+                energy_aircond_2        aircond_2       energy  N       kWh
+                energy_plugs_2  plugs_2 energy  N       kWh
+                energy_plugs_3  plugs_3 energy  N       kWh
+                energy_lights_3 lights_3        energy  N       kWh
+                energy_plugs_1  plugs_1 energy  N       kWh
+                energy_lights_1 lights_1        energy  N       kWh
+                energy_lights_2 lights_2        energy  N       kWh
+                </pre>
+                <p>Dans notre exemple précédent :</p>
+                <table class="table table-bordered table-striped">
+                <colgroup>
+                    <col width="25%" />
+                    <col width="75%" />
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <th>FORMAT_VERSION</th>
+                        <td>Version du format de fichier utilisé. Actuellement, nous utilisons la version 1.</td>
+                    </tr>
+                    <tr>
+                        <th>CREATION_DATE</th>
+                        <td>Date de création du fichier.</td>
+                    </tr>
+                    <tr>
+                        <th>ID_SITE</th>
+                        <td>Identifiant de votre site.</td>
+                    </tr>
+                    <tr>
+                        <th>FEEDBACK_TO</th>
+                        <td>Adresse e-mail de la personne en charge du site qui sera prévenu de la création des données.</td>
+                    </tr>
+                    <tr>
+                        <th>varname</th>
+                        <td>Identifiant unique de la variable.</td>
+                    </tr>
+                    <tr>
+                        <th>label</th>
+                        <td>Label utilisé pour nommé la variable dans un espace de texte par exemple.</td>
+                    </tr>
+                    <tr>
+                        <th>type</th>
+                        <td>Type de la variable (energy, temperature, ...).</td>
+                    </tr>
+                    <tr>
+                        <th>value_type</th>
+                        <td>Type des données reçu (N pour numérique, L pour logique, T pour texte).</td>
+                    </tr>
+                    <tr>
+                        <th>units</th>
+                        <td>Unité de la variable.</td>
+                    </tr>
+                    <tr>
+                        <th>lower_bound</th>
+                        <td>(optionnelle) Limite inférieure inclusive des valeurs admissibles.</td>
+                    </tr>
+                    <tr>
+                        <th>upper_bound</th>
+                        <td>(optionnelle) Limite supérieure inclusive des valeurs admissibles.</td>
+                    </tr>
+                    <tr>
+                        <th>delta_min</th>
+                        <td>(optionnelle) Différentiel minimum inclusif avec la valeur précédente.</td>
+                    </tr>
+                    <tr>
+                        <th>delta_max</th>
+                        <td>(optionnelle) Différentiel maximum inclusif avec la valeur précédente.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="section" id="requetes">
+            <h2>Requêtes</h2>
+            <p>Maintenant que notre fichier est crée, nous devrons utiliser la requête suivante pour l'envoyer vers la plate-forme (remplacez SITE_ID par votre identifiant de site, username:password par votre username et votre password et path/to/your/metadata/file.csv par la localisation de votre fichier contenant les méta-données):</p>
+            <pre class="code bash literal-block">
+            <span class="name variable">$ </span>curl -i -X POST <span class="literal string single">'https://api.openrj.eu/v1/users/current/sites/SITE_ID/variables'</span> -u username:password -F <span class="name variable">metadata</span><span class="operator">=</span>&#64;path/to/your/metadata/file.csv
+            </pre>
+            <p>Une réponse 201 devrait vous informer que les variables ont bien été créées. Sinon, c'est qu'il y a eu une erreur et que vous devez corriger votre fichier.</p>
+        </div>
+    </section>
+    <section class="container" id="etape-3-creation-des-series-pour-un-site">
+        <h1>Étape 3 - Création des séries pour un site</h1>
+        <p>Maintenant que nous avons crée nos variables, nous allons pouvoir envoyer des séries temporelles.</p>
+        <p>Étant donné que la plate-forme OpeNRj peut accueillir un grand volume de données, nous avons souhaité limité au maximum l'impact sur la bande passante. C'est pourquoi nous avons choisi d'écrire les séries dans un format textuelle simple et non verbeux que nous pourrons compresser en utilisant des outils standards. De plus, le traitement de ces fichiers pouvant être long, nous avons souhaité dissocier la partie réception et la partie stockage des données. Le processus de stockage se fait donc de façon asynchrone afin de libérer au plus tôt notre serveur de réception des données.</p>
+        <p>Pour limiter la taille nous enverrons donc une archive ZIP contenant toutes les séries temporelles de notre site. Voici la description du format attendu par la plate-forme.</p>
+        <div class="section" id="format-des-donnees">
+            <h2>Format des données</h2>
+            <p>Chaque série temporelle doit être stockée dans un fichier TSV différent où chaque entité doit être séparée par des tabulations. Il y aura donc un fichier TSV par Variable. Ces fichiers seront ensuite réunis dans une archive ZIP afin d'être compressés. L'archive ZIP portera le nom SITE_ID-series.zip où SITE_ID est l'identifiant du site. Chaque fichier TSV à l'intérieur de l'archive portera le nom VARIABLE_ID.YYMMDDHHmmss.csv où VARIABLE_ID est l'identifiant de la variable, et YYMMDDHHmmss est la date de création du fichier au format YYMMDDHHmmss. Par exemple, si nous créons le fichier le 20 mai 2014 à 18:33:24 pour la variable plug_3, le nom du fichier sera plug_3.140520183324.csv. Si nous continuons notre exemple et que notre site s'appelle TEST_PARIS, nous générerons une archive ZIP qui aura comme nom TEST_PARIS-series.zip et contiendra un seul fichier qui s'appellera plug_3.140520183324.csv.</p>
+            <p>Voici le format d'une série temporelle d'une variable (remplacez VARIABLE_ID par l'identifiant de votre variable, SITE_ID par l'identifiant de votre site et les &quot;timestamps&quot; et les &quot;values&quot; par vos données) :</p>
+            <pre class="literal-block">
+            FORMAT_VERSION  1
+            CREATION_DATE   2014-05-15T16:04:34Z
+            ID_SITE SITE_ID
+            FEEDBACK_TO     me&#64;worldcompany.com
+            VARNAME VARIABLE_ID
+
+            2013-10-24T00:00:00Z    11894
+            2013-10-24T06:00:00Z    11894
+            2013-10-24T12:00:00Z    11894
+            2013-10-24T18:00:00Z    11895
+            </pre>
+            <p>Dans notre exemple précédent :</p>
+            <table class="table table-bordered table-striped">
+                <colgroup>
+                    <col width="25%" />
+                    <col width="75%" />
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <th>FORMAT_VERSION</th>
+                        <td>Version du format de fichier utilisé. Actuellement, nous utilisons la version 1.</td>
+                    </tr>
+                    <tr>
+                        <th>CREATION_DATE</th>
+                        <td>Date de création du fichier.</td>
+                    </tr>
+                    <tr>
+                        <th>ID_SITE</th>
+                        <td>Identifiant de votre site,</td>
+                    </tr>
+                    <tr>
+                        <th>FEEDBACK_TO</th>
+                        <td>Adresse e-mail de la personne en charge du site qui sera prévenu de la création des données,</td>
+                    </tr>
+                    <tr>
+                        <th>VARNAME</th>
+                        <td>Identifiant unique de la variable,</td>
+                    </tr>
+                    <tr>
+                        <th>timestamp</th>
+                        <td>Chaque ligne suivant doit contenir une date UTC valide au format ISO8601</td>
+                    </tr>
+                    <tr>
+                        <th>value</th>
+                        <td>Chaque ligne suivant doit contenir une valeur cohérente par rapport à la définition des méta-données de la variable.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="section" id="id1">
+            <h2>Requêtes</h2>
+            <p>Une fois notre archive ZIP créée, nous allons pouvoir l'envoyer sur la plate-forme. Voici la requête à exécuter pour créer toutes les séries temporelles de toutes les variables d'un site (remplacez SITE_ID par votre identifiant de site, username:password par votre username et votre password et path/to/your/series/archive.zip par la localisation de votre archive ZIP contenant les séries temporelles) :</p>
+            <pre class="code bash literal-block">
+            <span class="name variable">$ </span>curl -i -X POST <span class="literal string single">'https://api.openrj.eu/v1/users/current/sites/SITE_ID/variables/series'</span> -u username:password -F <span class="name variable">zip</span><span class="operator">=</span>&#64;path/to/your/series/archive.zip
+            </pre>
+            <p>Cette requête vous renverra soit une erreur 404 pour vous dire que le site n'existe pas, soit une erreur 400 pour vous dire que votre archive est mal formée, soit un message de succès avec un jobID. Le traitement étant asynchrone, chaque envoi d'archive ZIP crée un job de traitement des séries temporelles. Pour vérifier que le stockage des données s'est bien passé, il faut faire une autre requête (remplacez SITE_ID par votre identifiant de site, username:password par votre username et votre password et JOB_ID par l'identifiant du job qui vous a été envoyé dans la réponse de la requête précédente) :</p>
+            <pre class="code bash literal-block">
+            <span class="name variable">$ </span>curl -i -X GET <span class="literal string single">'https://api.openrj.eu/v1/users/current/sites/SITE_ID/jobs/JOB_ID'</span> -u username:password
+            </pre>
+            <p>Si l'état du job répond &quot;Ongoing ...&quot;, cela signifie que le job est toujours en train de traiter votre archive. Si le job renvoie &quot;Completed&quot; cela signifie que les données ont été traitées et que vous pouvez les récupérer grâce à la requête de la section suivante. Sinon, c'est qu'il y a eu un problème et le message d'erreur devrait vous aider à procéder à la correction de votre archive.</p>
+            <p>Nous allons maintenant décrire comment formater votre archive ZIP.</p>
+        </div>
+    </section>
+    <section class="container" id="etape-4-lecture-des-series">
+        <h1>Étape 4 - Lecture des séries</h1>
+        <p>Pour récupérer les séries temporelles des séries stockées sur le serveur, il existe deux options :</p>
+        <ul class="simple">
+            <li>Soit vous récupérez l'intégralité des données de votre site en appelant la commande (remplacez le SITE_ID par votre identifiant de site et les paramètres &quot;from&quot; et &quot;to&quot; par l'intervalle de temps souhaité) :</li>
+        </ul>
+        <pre class="code bash literal-block">
+        <span class="name variable">$ </span>curl -i -X GET <span class="literal string single">'https://api.openrj.eu/v1/sites/SITE_ID/variables/series?from=2014-01-01T00:00:00Z&amp;to=2014-12-31T23:59:59Z'</span>
+        </pre>
+        <ul class="simple">
+            <li>Soit vous récupérez vos données variable par variable en appelant la commande (remplacez le SITE_ID par votre identifiant de site, VARIABLE_ID par votre identifiant de variable et les paramètres &quot;from&quot; et &quot;to&quot; par l'intervalle de temps souhaité) :</li>
+        </ul>
+        <pre class="code bash literal-block">
+        <span class="name variable">$ </span>curl -i -X GET <span class="literal string single">'https://api.openrj.eu/v1/sites/SITE_ID/variables/VARIABLE_ID/series?from=2014-01-01T00:00:00Z&amp;to=2014-12-31T23:59:59Z'</span>
+        </pre>
+    </section>
+</div>
+
+<script type="text/javascript" src="/plugins/jquery-2.0.3.min.js"></script>

@@ -10,6 +10,8 @@
  * 
  */
 
+'use strict';
+
 module.exports[403] = function badRequest(message, req, res) {
 
   /*

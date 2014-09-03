@@ -1,28 +1,12 @@
 <!-- WRAPPER -->
+
+<link href="/styles/sites.css" rel="stylesheet" type="text/css" />
+
 <div id="wrapper">
     <section>
         <div id="gmap_default"><!-- google map --></div>
 
         <script type="text/javascript" src="//maps.google.com/maps/api/js?sensor=true&amp;#038;ver=3.8.1"></script>
-        <script type="text/javascript">
-            function initialize_property_map(){
-                var propertyLocation = new google.maps.LatLng(43.6732936, 6.8782122);
-                var propertyMapOptions = {
-                    center: propertyLocation,
-                    zoom: 5,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP,
-                    scrollwheel: false
-                };
-                var propertyMap = new google.maps.Map(document.getElementById("gmap_default"), propertyMapOptions);
-                var propertyMarker = new google.maps.Marker({
-                    position: propertyLocation,
-                    map: propertyMap
-                    //, icon: "assets/images/icons/realestate/map.png"
-                });
-            }
-
-            window.onload = initialize_property_map();
-        </script>
     </section>
 
     <section class="container">
@@ -35,115 +19,12 @@
                     <strong class="styleColor">Sites</strong>
                 </h3>
 
-                <div class="row">
-
-                    <div class="col-md-4">
-
-                        <!-- item -->
-                        <div class="item-box">
-                            <figure>
-                                <a class="item-hover" href="/data-search/CSTB_SOPHIA/variables">
-                                    <span class="overlay color2"></span>
-                                    <span class="inner">
-                                        <span class="block fa fa-plus fsize20"></span>
-                                        <strong>Visualiser</strong> les données
-                                    </span>
-                                </a>
-                                <img alt="" class="img-responsive" src="/images/community/cstb.jpg" width="409" height="271" />
-                            </figure>
-                            <div class="item-box-desc">
-                                <h4>Le CSTB à Sophia</h4>
-                                <small>Alpes-Maritimes (06)</small>
-                                <p>
-                                    Partenaire du projet, le CSTB, organisme de recherche situé à Sophia Antipolis, met à disposition sur la plateforme ses données de consommation.
-                                </p>
-                                <p style="text-align: right;">
-                                    <span class="fsize12 pull-right">
-                                        280 000 <i class="fa fa-download" title="download"></i><br>
-                                        12 <i class="fa fa-rss" title="garage"></i><br>
-                                        23 Oct. 2013 <i class="fa fa-calendar" title="calendar"></i> 
-                                    </span>
-                                </p>
-                            </div>
-                        </div>
-                        <!-- /item -->
-
-                    </div>
-
-                    <div class="col-md-4">
-
-                        <!-- item -->
-                        <div class="item-box">
-                            <figure>
-                                <a class="item-hover" href="/data-search/UNS_NICE/variables">
-                                    <span class="overlay color2"></span>
-                                    <span class="inner">
-                                        <span class="block fa fa-plus fsize20"></span>
-                                        <strong>Visualiser</strong> les données
-                                    </span>
-                                </a>
-                                <img alt="" class="img-responsive" src="/images/community/univ.jpg" width="409" height="271" />
-                            </figure>
-                            <div class="item-box-desc">
-                                <h4>Université de Nice</h4>
-                                <small>Alpes-Maritimes (06)</small>
-                                <p>
-                                    L'Universités de Nice Sophia-Antipolis et du Sud Toulon Var a mis à disposition les données de consommations de plusieurs bâtiments de leurs campus.
-                                </p>
-                                <p style="text-align: right;">
-                                    <span class="fsize12 pull-right">
-                                        280 000 <i class="fa fa-download" title="download"></i><br>
-                                        12 <i class="fa fa-rss" title="garage"></i><br>
-                                        23 Oct. 2013 <i class="fa fa-calendar" title="calendar"></i> 
-                                    </span>
-                                </p>
-                            </div>
-                        </div>
-                        <!-- /item -->
-
-                    </div>
-
-                    <div class="col-md-4">
-
-                        <!-- item -->
-                        <div class="item-box">
-                            <figure>
-                                <a class="item-hover" href="/data-search/MEDIATHEQUE_ANTIBES/variables">
-                                    <span class="overlay color2"></span>
-                                    <span class="inner">
-                                        <span class="block fa fa-plus fsize20"></span>
-                                        <strong>Visualiser</strong> les données
-                                    </span>
-                                </a>
-                                <img alt="" class="img-responsive" src="/images/community/mediatheque.jpg" width="409" height="271" />
-                            </figure>
-                            <div class="item-box-desc">
-                                <h4>Médiathèque d'Antibes</h4>
-                                <small>Alpes-Maritimes (06)</small>
-                                <p>
-                                    La Médiathèque communautaire d'Antibes, bâtiment de 4 750 m², est le pôle central du réseau des médiathèques de la Communauté d'Agglomération Sophia Antipolis.
-                                </p>
-                                <p style="text-align: right;">
-                                    <span class="fsize12 pull-right">
-                                        280 000 <i class="fa fa-download" title="download"></i><br>
-                                        12 <i class="fa fa-rss" title="garage"></i><br>
-                                        23 Oct. 2013 <i class="fa fa-calendar" title="calendar"></i> 
-                                    </span>
-                                </p>
-                            </div>
-                        </div>
-                        <!-- /item -->
-
-                    </div>
-
-                </div>
-
-                <div class="row">
+                <div class="row sites_list">
                     <% _.each(sites, function (site) { %>
                     <div class="col-md-4">
-                        <div class="item-box">
+                        <div class="item-box site-item-box <%= site.extID %>">
                             <figure>
-                                <a class="item-hover" href="/data-search/<%= site.extID %>/variables">
+                                <a class="item-hover" href="/sites/<%= site.extID %>/variables">
                                     <span class="overlay color2"></span>
                                     <span class="inner">
                                         <span class="block fa fa-plus fsize20"></span>
@@ -153,22 +34,19 @@
                                 <img alt="" class="img-responsive" src="<%= site.photo %>" width="409" height="271" />
                             </figure>
                             <div class="item-box-desc">
-                                <h4><%= site.label %></h4>
-                                <small><%= site.location %></small>
-                                <p>
+                                <h4 class="site-label"><%= site.label %></h4>
+                                
+                                <small class="site-location"><%= locationStringifier(site.location) %></small>
+                                <p class="site-description">
+                                    <%if (site.description.length >= 75) { %>
+                                    <%= site.description.substring(0, 74) + ' ...' %>
+                                    <% } else { %>
                                     <%= site.description %>
+                                    <% } %>
                                 </p>
-                                <p style="text-align: right;">
-                                    <span class="fsize12 pull-right">
-                                        <%= site.seriesCount %> <i class="fa fa-download" title="download"></i><br>
-                                        <%= site.variablesNumber %> <i class="fa fa-rss" title="garage"></i><br>
-                                    <% if (site.beginDate !== '') { %>
-                                        <%= site.beginDate %> <i class="fa fa-calendar" title="calendar"></i><br>
-                                    <% } %>
-                                    <% if (site.endDate !== '') { %>
-                                        <%= site.endDate %> <i class="fa fa-calendar" title="calendar"></i>
-                                    <% } %>
-                                    </span>
+                                <p style="text-align: right;" class="row">
+                                    <span class="fsize12 pull-right <%= site.extID %>-series-informations-number list-series-informations"></span>
+                                    <span class="fsize12 pull-left <%= site.extID %>-series-informations-date list-series-informations"></span>
                                 </p>
                             </div>
                         </div>
@@ -225,3 +103,14 @@
 <!-- /WRAPPER -->
 
 <script type="text/javascript" src="/plugins/jquery-2.0.3.min.js"></script>
+
+<script type="text/html" id="template-series-information">
+    SERIESCOUNT <i class="fa fa-download" title="download"></i><br>
+    VARIABLENUMBER <i class="fa fa-rss" title="garage"></i><br>
+</script>
+
+<script type="text/html" id="template-series-information-calendar">
+    DATE <i class="fa fa-calendar" title="calendar"></i><br>
+</script>
+
+<script type="text/javascript" src="/js/sites.js"></script>

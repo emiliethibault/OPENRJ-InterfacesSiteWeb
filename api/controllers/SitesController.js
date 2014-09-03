@@ -15,15 +15,18 @@
  * @docs        :: http://sailsjs.org/#!documentation/controllers
  */
 
+'use strict';
+
 var request = require('request'),
     moment = require('moment'),
+    DATE_FORMAT_OUT = 'D MMM YYYY',
     getSitesList = function (url, result, callback) {
         request(url, function (error, response, body) {
             if (!error && response.statusCode === 200) {
                 body = JSON.parse(body);
-                result['sites'] = body.sites;
+                result.sites = body.sites;
             } else {
-                result['sites'] = [];
+                result.sites = [];
             }
 
             callback(result);
@@ -34,64 +37,106 @@ var request = require('request'),
         moment.locale('fr');
         
         var dateFormatIn = 'YYYY-MM-DDTHH:mm:ss.fffZ',
-            dateFormatout = 'D MMM YYYY',
-            newBeginDate = moment(variable.series[0].isodate, dateFormatIn).format(dateFormatout),
-            newEndDate = moment(variable.series[0].isodate, dateFormatIn).format(dateFormatout);
+            newStartDate = moment(variable.startDate, dateFormatIn),
+            newEndDate = moment(variable.endDate, dateFormatIn);
         
-        site['seriesCount'] += variable.count;
-        if (site['beginDate'] === '' || site['beginDate'] > newBeginDate) {
-            site['beginDate'] = newBeginDate;
+        site.seriesCount += variable.count;
+        if (site.startDate === '' || site.startDate > newStartDate) {
+            site.startDate = newStartDate;
         }
-        if (site['endDate'] === '' || site['endDate'] < newEndDate) {
-            site['endDate'] = newEndDate;
+        if (site.endDate === '' || site.endDate < newEndDate) {
+            site.endDate = newEndDate;
         }
     },
-    getSeriesInformationPerSite = function (url, result, index, callback) {
-        var seriesInformation;
+    getVariablesNumber = function (variablesURL, callback) {
         
-        if (index === result.sites.length) {
-            callback(result);
-        } else {
-            var seriesURL = url + '/' + result.sites[index].extID + '/variables/series';
-            
-            result.sites[index]['seriesCount'] = 0;
-            result.sites[index]['variablesNumber'] = 0;
-            result.sites[index]['beginDate'] = '';
-            result.sites[index]['endDate'] = '';
-            
-            request(seriesURL, function (error, response, body) {
-                if (!error && response.statusCode === 200) {
-                    body = JSON.parse(body);
-                    var variables = body.result;
-                    if (variables.length) {
-                        result.sites[index]['variablesNumber'] = variables.length;
-                    }
-                    for (var i = 0 ; i < variables.length ; i++) {
-                        updateSeriesInformation(result.sites[index], variables[i]);
-                    }
-                }
+        request(variablesURL, function (error, response, body) {
 
-                getSeriesInformationPerSite(url, result, index + 1, callback);
+            var variables = [];
+
+            if (!error && response.statusCode === 200) {
+                body = JSON.parse(body);
+                variables = body.variables;
+            }
+            
+            callback(variables.length);
+        });
+    },
+    getSeriesInformationPerSite = function (variablesURL, seriesURL, callback) {           
+        var result = {
+            'seriesCount': 0,
+            'variablesNumber': 0,
+            'startDate': '',
+            'endDate': ''
+        };
+        
+        request(seriesURL, function (error, response, body) {
+
+            if (!error && response.statusCode === 200) {
+                body = JSON.parse(body);
+                var variables = body.result;
+                for (var i = 0 ; i < variables.length ; i++) {
+                    updateSeriesInformation(result, variables[i]);
+                }
+                if (result.startDate !== '') {
+                    result.startDate = result.startDate.format(DATE_FORMAT_OUT);
+                }
+                if (result.endDate !== '') {
+                    result.endDate = result.endDate.format(DATE_FORMAT_OUT);
+                }
+            }
+
+            getVariablesNumber(variablesURL, function (variablesNumber) {
+                result.variablesNumber = variablesNumber;
+                callback(result);
             });
+        });
+    },
+    locationStringifier = function (location) {
+        var locationSt = location;
+
+        if (location === '06') {
+            locationSt = 'Alpes-Maritimes (' +location + ')';
         }
-    };
+        else if (location === '64') {
+            locationSt = 'Pyrénées-Atlantiques (' +location + ')';
+        }
+
+        return locationSt;
+    },
+    APIURL = 'https://api.openrj.eu/v1/sites';
 
 module.exports = {
     
     sites: function (req, res) {
 
-        var sitesURL = 'https://api.openrj.eu/v1/sites',
-            pageTitle = 'OpeNRJ - Sites',
+        var pageTitle = 'OpeNRJ - Sites',
             options = {
-                'title': pageTitle
+                'title': pageTitle,
+                'locationStringifier': locationStringifier
             };
 
-        getSitesList(sitesURL, options, function (result) {
-            getSeriesInformationPerSite(sitesURL, result, 0, function (result) {
-                res.view(null, result);
-            });
+        getSitesList(APIURL, options, function (result) {
+            res.view(null, result);
         });
     },
+
+    seriesInformation: function (req, res) {
+        var siteID = req.params.siteID,
+            variablesURL = APIURL + '/' + siteID + '/variables',
+            seriesURL = variablesURL + '/series';
+
+        getSeriesInformationPerSite(variablesURL, seriesURL, function (result) {
+            res.json(200, result);
+        });
+    },
+
+
+    getSeriesInformationPerSite: getSeriesInformationPerSite,
+    updateSeriesInformation: updateSeriesInformation,
+    getSitesList: getSitesList,
+
+    locationStringifier: locationStringifier,
 
 
   /**

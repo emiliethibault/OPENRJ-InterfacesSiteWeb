@@ -8,6 +8,8 @@
  * http://sailsjs.org/#documentation
  */
 
+/*jshint unused:false*/
+
 module.exports.sockets = {
 
   // This custom onConnect function will be run each time AFTER a new socket connects
