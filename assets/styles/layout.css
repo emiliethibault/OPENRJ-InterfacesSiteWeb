@@ -1285,7 +1285,7 @@ span.js_loader {
 	max-height:263px;
 }
 .item-box .socials {
-	border-top:#eee 1px solid;
+	/*order-top:#eee 1px solid;*/
 	text-align:center;
 	display:block;
 }
